@@ -17,7 +17,7 @@ import {
   useClearByFocusCell,
 } from "react-native-confirmation-code-field";
 import { useNavigation } from "@react-navigation/native";
-import { checkMobile } from "../services/Login";
+import { checkMobile } from "../services/login";
 
 const CELL_COUNT = 6;
 
