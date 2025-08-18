@@ -1,22 +1,27 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import Home from '../pages/Home';
-import Register from '../pages/Register';
-import Login from '../pages/Login';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+// @ts-ignore
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const Stack = createStackNavigator();
+import BottomTabNavigation from "./BottomTabNavigation";
+import AuthNavigator from "./AuthNavigator";
+import { selectIsAuthenticated } from "../store/slice/user";
+import { useAppSelector } from "../store/hooks";
 
-function AppNavigator() {
+const Stack = createNativeStackNavigator();
+
+export default function AppNavigator() {
+  const  isLoggedIn  = useAppSelector(selectIsAuthenticated);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="Home" component={Home} />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {isLoggedIn ? (
+          <Stack.Screen name="BottomTabNavigation" component={BottomTabNavigation} />
+        ) : (
+          <Stack.Screen name="AuthStack" component={AuthNavigator} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-export default AppNavigator;

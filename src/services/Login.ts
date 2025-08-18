@@ -1,5 +1,5 @@
 import { AUTH_CHECK_MOBILE } from "../const";
-import { CheckMobileResponse } from "../types/auth";
+import { CheckMobileResponse, LoginPayload, LoginResponse } from "../types/auth";
 
 export const checkMobile = async (mobileNumber: string): Promise<CheckMobileResponse> => {
     try {
@@ -22,6 +22,29 @@ export const checkMobile = async (mobileNumber: string): Promise<CheckMobileResp
       return data;
     } catch (error) {
       console.error('Error checking mobile:', error);
+      throw error;
+    }
+  }
+
+export const loginWithOtp = async (loginData: LoginPayload): Promise<LoginResponse> => {
+    try {
+      const response = await fetch('YOUR_LOGIN_API_ENDPOINT', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Login failed');
+      }
+
+      const data: LoginResponse = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error during login:', error);
       throw error;
     }
   }
