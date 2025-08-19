@@ -1,8 +1,20 @@
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
-import React from 'react'
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { clearUser, selectUser, selectIsAuthenticated } from '../store/slice/user';
-import { useNavigation } from '@react-navigation/native';
+import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+} from "react-native";
+import Icon from "react-native-vector-icons/Feather";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import {
+  clearUser,
+  selectUser,
+  selectIsAuthenticated,
+} from "../store/slice/user";
+import { useNavigation } from "@react-navigation/native";
 
 const Profile = () => {
   const dispatch = useAppDispatch();
@@ -11,32 +23,24 @@ const Profile = () => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
   const handleLogout = () => {
-    Alert.alert(
-      "Logout",
-      "Are you sure you want to logout?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel"
+    Alert.alert("Logout", "Are you sure you want to logout?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: () => {
+          dispatch(clearUser());
+          navigation.navigate("Login" as never);
         },
-        {
-          text: "Logout",
-          style: "destructive",
-          onPress: () => {
-            // Clear user data from Redux store
-            dispatch(clearUser());
-            navigation.navigate("Login" as never);
-          }
-        }
-      ]
-    );
+      },
+    ]);
   };
 
   if (!isAuthenticated || !user) {
     return (
       <View style={styles.container}>
         <Text style={styles.errorText}>Please login to view profile</Text>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.loginButton}
           onPress={() => navigation.navigate("Login" as never)}
         >
@@ -47,147 +51,207 @@ const Profile = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.profileHeader}>
-        <View style={styles.avatarContainer}>
-          <Text style={styles.avatarText}>
-            {user.firstName.charAt(0)}{user.lastName.charAt(0)}
-          </Text>
+    <ScrollView style={styles.container}>
+      {/* Header Card */}
+      <View style={styles.headerCard}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Icon name="user" size={40} color="#fff" style={{ marginRight: 10, backgroundColor: "rgba(255,255,255,0.2)", borderRadius: 10, padding: 4 }} />
+          <View>
+            <Text style={styles.userName}>
+              {user.firstName} {user.lastName}
+            </Text>
+            <Text style={styles.userRole}>Truck Owner</Text>
+            <Text style={styles.userPhone}>{user.mobileNumber}</Text>
+          </View>
+          </View>
+          <TouchableOpacity style={styles.editBtn}>
+            <Text style={styles.editBtnText}>Edit</Text>
+          </TouchableOpacity>
         </View>
-        <Text style={styles.userName}>{user.firstName} {user.lastName}</Text>
-        <Text style={styles.userCode}>{user.userCode}</Text>
-      </View>
 
-      <View style={styles.infoSection}>
-        <Text style={styles.sectionTitle}>Personal Information</Text>
-        
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Username:</Text>
-          <Text style={styles.infoValue}>{user.userName}</Text>
-        </View>
-        
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Mobile:</Text>
-          <Text style={styles.infoValue}>{user.mobileNumber}</Text>
-        </View>
-        
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Email:</Text>
-          <Text style={styles.infoValue}>{user.email}</Text>
-        </View>
-        
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>City:</Text>
-          <Text style={styles.infoValue}>{user.city}</Text>
-        </View>
-        
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>State:</Text>
-          <Text style={styles.infoValue}>{user.state}</Text>
+        {/* Stats */}
+        <View style={styles.statsRow}>
+          <View style={styles.statBox}>
+            <Text style={styles.statValue}>24</Text>
+            <Text style={styles.statLabel}>Active Loads</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text style={styles.statValue}>4.8</Text>
+            <Text style={styles.statLabel}>Rating</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text style={styles.statValue}>156</Text>
+            <Text style={styles.statLabel}>Completed</Text>
+          </View>
         </View>
       </View>
 
+      {/* Quick Actions */}
+      <Text style={styles.sectionTitle}>Quick Actions</Text>
+      <View style={styles.quickActions}>
+        <TouchableOpacity style={styles.quickCard}>
+          <Icon name="file-text" size={24} color="#4A6CF7" />
+          <Text style={styles.quickTitle}>FASTag History</Text>
+          <Text style={styles.quickSubtitle}>View transactions</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.quickCard}>
+          <Icon name="shield" size={24} color="#27AE60" />
+          <Text style={styles.quickTitle}>Insurance Docs</Text>
+          <Text style={styles.quickSubtitle}>Download policies</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Account Section */}
+      <Text style={styles.sectionTitle}>Account</Text>
+      <TouchableOpacity style={styles.listItem}>
+        <Icon name="truck" size={20} color="#666" />
+        <View style={styles.listTextBox}>
+          <Text style={styles.listTitle}>My Vehicles</Text>
+          <Text style={styles.listSubtitle}>Manage 10 vehicles</Text>
+        </View>
+        <Icon name="chevron-right" size={20} color="#999" />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.listItem}>
+        <Icon name="credit-card" size={20} color="#666" />
+        <View style={styles.listTextBox}>
+          <Text style={styles.listTitle}>Transaction History</Text>
+          <Text style={styles.listSubtitle}>View all payments</Text>
+        </View>
+        <Icon name="chevron-right" size={20} color="#999" />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.listItem}>
+        <Icon name="settings" size={20} color="#666" />
+        <View style={styles.listTextBox}>
+          <Text style={styles.listTitle}>Settings</Text>
+          <Text style={styles.listSubtitle}>App preferences</Text>
+        </View>
+        <Icon name="chevron-right" size={20} color="#999" />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.listItem}>
+        <Icon name="help-circle" size={20} color="#666" />
+        <View style={styles.listTextBox}>
+          <Text style={styles.listTitle}>Help & Support</Text>
+          <Text style={styles.listSubtitle}>Get assistance</Text>
+        </View>
+        <Icon name="chevron-right" size={20} color="#999" />
+      </TouchableOpacity>
+
+      {/* Logout Button */}
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutButtonText}>Logout</Text>
       </TouchableOpacity>
-    </View>
-  )
-}
+    </ScrollView>
+  );
+};
 
-export default Profile
+export default Profile;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
+  container: { flex: 1, backgroundColor: "#f5f5f5" },
+
+  headerCard: {
+    backgroundColor: "#3B3B3B",
+    borderRadius: 16,
     padding: 20,
+    margin: 16,
   },
-  profileHeader: {
-    alignItems: 'center',
-    marginBottom: 30,
-    paddingTop: 20,
+  userName: { fontSize: 16, fontWeight: "700", color: "#fff" },
+  userRole: { fontSize: 12, color: "#ddd", marginTop: 2 },
+  userPhone: { fontSize: 12, color: "#ddd", marginTop: 2 },
+  editBtn: {
+    backgroundColor: "rgba(255,255,255,0.2)", // glassy white
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    alignSelf: "flex-start",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.3)", // subtle border
   },
-  avatarContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 16,
+  editBtnText: {
+    color: "#fff", // keep text white for contrast
+    fontWeight: "600",
   },
-  avatarText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: 'bold',
+
+  statsRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 20,
   },
-  userName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  userCode: {
-    fontSize: 16,
-    color: '#666',
-  },
-  infoSection: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 20,
-  },
+  statBox: { alignItems: "center" },
+  statValue: { fontSize: 18, fontWeight: "700", color: "#fff" },
+  statLabel: { fontSize: 12, color: "#ddd", marginTop: 4 },
+
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 16,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  infoLabel: {
     fontSize: 16,
-    color: '#666',
-    fontWeight: '500',
+    fontWeight: "600",
+    marginHorizontal: 16,
+    marginTop: 20,
+    marginBottom: 10,
+    color: "#333",
   },
-  infoValue: {
-    fontSize: 16,
-    color: '#333',
-    fontWeight: '400',
+
+  quickActions: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginHorizontal: 16,
   },
-  logoutButton: {
-    backgroundColor: '#ff4444',
-    paddingVertical: 16,
+  quickCard: {
+    flex: 1,
+    backgroundColor: "#fff",
     borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 'auto',
+    padding: 16,
+    marginHorizontal: 6,
+    alignItems: "center",
   },
-  logoutButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+  quickTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    marginTop: 8,
+    color: "#333",
   },
+  quickSubtitle: { fontSize: 12, color: "#666", marginTop: 2 },
+
+  listItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    padding: 16,
+    marginHorizontal: 16,
+    borderRadius: 12,
+    marginBottom: 10,
+  },
+  listTextBox: { flex: 1, marginLeft: 12 },
+  listTitle: { fontSize: 15, fontWeight: "600", color: "#333" },
+  listSubtitle: { fontSize: 13, color: "#666" },
+
+  logoutButton: {
+    // backgroundColor: "#ff4444",
+    margin: 16,
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#DE3131",
+  },
+  logoutButtonText: { color: "#DE3131", fontSize: 16, fontWeight: "600" },
+
   errorText: {
     fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 20,
+    color: "#666",
+    textAlign: "center",
+    marginTop: 20,
   },
   loginButton: {
-    backgroundColor: '#000',
+    backgroundColor: "#000",
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
+    alignSelf: "center",
+    marginTop: 20,
   },
-  loginButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-})
+  loginButtonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
+});

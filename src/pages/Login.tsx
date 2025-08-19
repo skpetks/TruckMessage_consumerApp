@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F9FAFB",
     borderWidth: 1,
     borderColor: "#E5E7EB",
-    borderRadius: 12,
+    borderRadius: 10,
     paddingHorizontal: 16,
     paddingVertical: 1,
   },
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    // height: 30,
+    height: 30,
     fontSize: 12,
     color: "#111827",
   },
