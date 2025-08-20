@@ -27,9 +27,9 @@ export interface User {
 export interface LoginPayload {
     mobileNumber: string;
     otp: string; // Changed from password to otp
-    deviceType: string;
-    deviceToken: string;
-    loginType: string;
+    // deviceType: string;
+    // deviceToken: string;
+    // loginType: string;
 }
 
 export interface LoginResponse {

@@ -18,14 +18,14 @@ import {
   useClearByFocusCell,
 } from "react-native-confirmation-code-field";
 import { useNavigation } from "@react-navigation/native";
-import { checkMobile, loginWithOtp } from "../services/login";
+import { checkMobile, loginWithOtp, sendOtp } from "../services/login";
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import color from "../components/color";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setUser, setLoading, setError, clearError } from "../store/slice/user";
 
-const CELL_COUNT = 6;
+const CELL_COUNT = 4;
 
 export default function Login() {
   const navigation = useNavigation();
@@ -37,6 +37,7 @@ export default function Login() {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
+  const [otpResponse, setOtpResponse] = useState(null);
 
   const ref = useBlurOnFulfill({ value: otp, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -57,7 +58,7 @@ export default function Login() {
     }
   }, [error, dispatch]);
 
-  const sendOtp = async () => {
+  const handleSendOtp = async () => {
     if (phone.length < 10) {
       Alert.alert("Error", "Please enter a valid phone number (at least 10 digits)");
       return;
@@ -69,8 +70,15 @@ export default function Login() {
       
       if (response.exists) {
         // Mobile exists, proceed with OTP
-        console.log("Mobile exists, sending OTP to", phone);
-        setIsOtpSent(true);
+        console.log("Mobile exists, sending OTP to", response);
+        const otpResponse = await sendOtp(phone);
+        console.log('otpResponse', otpResponse);
+        if(otpResponse.otp){
+          setIsOtpSent(true);
+          setOtpResponse(otpResponse);
+        }else{
+          Alert.alert("Error", "Failed to send OTP. Please try again.");
+        }
       } else {
         // Mobile doesn't exist, navigate to register
         navigation.navigate("Register" as never)
@@ -94,13 +102,14 @@ export default function Login() {
       const loginData = {
         mobileNumber: phone,
         otp: otp,
-        deviceType: Platform.OS,
-        deviceToken: "mock-device-token", // Replace with actual device token
-        loginType: "otp"
+        // deviceType: Platform.OS,
+        // deviceToken: "mock-device-token", // Replace with actual device token
+        // loginType: "otp"
       };
 
-      // const response = await loginWithOtp(loginData);
-      
+      const response = await loginWithOtp(loginData);
+
+      console.log('response', response);
       // Save user data to Redux store
       dispatch(setUser({
         user: {
@@ -177,7 +186,7 @@ export default function Login() {
             
             <TouchableOpacity 
               style={[styles.signInButton, isLoading && styles.buttonDisabled]} 
-              onPress={sendOtp}
+              onPress={handleSendOtp}
               disabled={isLoading}
             >
               <Text style={styles.signInButtonText}>Sign In</Text>
@@ -202,6 +211,7 @@ export default function Login() {
           <>
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Enter OTP</Text>
+              <Text style={styles.otpLabel}>{otpResponse?.otp}</Text>
               <CodeField
                 ref={ref}
                 {...props}
@@ -332,7 +342,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: 30,
+    height: 38,
     fontSize: 12,
     color: "#111827",
   },
@@ -427,5 +437,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingHorizontal: 20,
     lineHeight: 18,
+  },
+  otpLabel: {
+    fontSize: 12,
+    color: "#374151",
+    marginBottom: 8,
+    textAlign: "left",
+    alignSelf: "flex-start",
   },
 });

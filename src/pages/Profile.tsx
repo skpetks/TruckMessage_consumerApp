@@ -15,6 +15,7 @@ import {
   selectIsAuthenticated,
 } from "../store/slice/user";
 import { useNavigation } from "@react-navigation/native";
+import { hexToRgba } from "../components/color";
 
 const Profile = () => {
   const dispatch = useAppDispatch();
@@ -30,7 +31,6 @@ const Profile = () => {
         style: "destructive",
         onPress: () => {
           dispatch(clearUser());
-          navigation.navigate("Login" as never);
         },
       },
     ]);
@@ -91,12 +91,12 @@ const Profile = () => {
       <Text style={styles.sectionTitle}>Quick Actions</Text>
       <View style={styles.quickActions}>
         <TouchableOpacity style={styles.quickCard}>
-          <Icon name="file-text" size={24} color="#4A6CF7" />
+          <Icon name="file-text" size={24} color="#4A6CF7" style={{ backgroundColor: hexToRgba("#4A6CF7", 0.1), borderRadius: 10, padding: 4 }} />
           <Text style={styles.quickTitle}>FASTag History</Text>
           <Text style={styles.quickSubtitle}>View transactions</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.quickCard}>
-          <Icon name="shield" size={24} color="#27AE60" />
+          <Icon name="shield" size={24} color="#27AE60" style={{ backgroundColor: hexToRgba("#27AE60", 0.1), borderRadius: 10, padding: 4 }} />
           <Text style={styles.quickTitle}>Insurance Docs</Text>
           <Text style={styles.quickSubtitle}>Download policies</Text>
         </TouchableOpacity>
@@ -105,7 +105,7 @@ const Profile = () => {
       {/* Account Section */}
       <Text style={styles.sectionTitle}>Account</Text>
       <TouchableOpacity style={styles.listItem}>
-        <Icon name="truck" size={20} color="#666" />
+        <Icon name="truck" size={20} color="#666" style={{ backgroundColor: hexToRgba("#666", 0.1), borderRadius: 10, padding: 4 }} />
         <View style={styles.listTextBox}>
           <Text style={styles.listTitle}>My Vehicles</Text>
           <Text style={styles.listSubtitle}>Manage 10 vehicles</Text>
@@ -114,7 +114,7 @@ const Profile = () => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.listItem}>
-        <Icon name="credit-card" size={20} color="#666" />
+        <Icon name="credit-card" size={20} color="#666" style={{ backgroundColor: hexToRgba("#666", 0.1), borderRadius: 10, padding: 4 }} />
         <View style={styles.listTextBox}>
           <Text style={styles.listTitle}>Transaction History</Text>
           <Text style={styles.listSubtitle}>View all payments</Text>
@@ -123,7 +123,7 @@ const Profile = () => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.listItem}>
-        <Icon name="settings" size={20} color="#666" />
+        <Icon name="settings" size={20} color="#666" style={{ backgroundColor: hexToRgba("#666", 0.1), borderRadius: 10, padding: 4 }} />
         <View style={styles.listTextBox}>
           <Text style={styles.listTitle}>Settings</Text>
           <Text style={styles.listSubtitle}>App preferences</Text>
@@ -132,7 +132,7 @@ const Profile = () => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.listItem}>
-        <Icon name="help-circle" size={20} color="#666" />
+        <Icon name="help-circle" size={20} color="#666" style={{ backgroundColor: hexToRgba("#666", 0.1), borderRadius: 10, padding: 4 }} />
         <View style={styles.listTextBox}>
           <Text style={styles.listTitle}>Help & Support</Text>
           <Text style={styles.listSubtitle}>Get assistance</Text>

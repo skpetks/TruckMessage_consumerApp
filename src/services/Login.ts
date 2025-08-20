@@ -1,4 +1,4 @@
-import { AUTH_CHECK_MOBILE } from "../const";
+import { AUTH_CHECK_MOBILE, User_Login_Otp, User_Send_Otp } from "../const";
 import { CheckMobileResponse, LoginPayload, LoginResponse } from "../types/auth";
 
 export const checkMobile = async (mobileNumber: string): Promise<CheckMobileResponse> => {
@@ -26,9 +26,35 @@ export const checkMobile = async (mobileNumber: string): Promise<CheckMobileResp
     }
   }
 
+  export const sendOtp = async (mobileNumber: string) => {
+    try {
+      const response = await fetch(User_Send_Otp, {
+        method: "POST",
+        headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mobileNumber,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      console.log("OTP sent successfully:", data);
+      return data;
+    } catch (error) {
+      console.error("Send OTP failed:", error);
+      throw error;
+    }
+  };
+
 export const loginWithOtp = async (loginData: LoginPayload): Promise<LoginResponse> => {
     try {
-      const response = await fetch('YOUR_LOGIN_API_ENDPOINT', {
+      const response = await fetch(User_Login_Otp, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

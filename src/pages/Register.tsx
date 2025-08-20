@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,9 @@ import { registerUser } from "../services/register";
 import { useNavigation } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/Feather';
 import color from "../components/color";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { Dropdown } from 'react-native-element-dropdown';
+import { fetchStates } from "../services/states";
 
 export default function RegisterScreen() {
   const navigation = useNavigation()
@@ -22,7 +25,7 @@ export default function RegisterScreen() {
     firstName: "",
     lastName: "",
     userName: "",
-    userCode: "08-",
+    userCode: "",
     password: "",
     mobileNumber: "",
     email: "",
@@ -40,13 +43,44 @@ export default function RegisterScreen() {
   const [userType, setUserType] = useState("truckOwner");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [states, setStates] = useState<Array<{ id: string; name: string; code?: string }>>([]);
+  const [statesLoading, setStatesLoading] = useState(false);
+
+  useEffect(() => {
+    loadStates();
+  }, []);
+
+  const loadStates = async () => {
+    setStatesLoading(true);
+    try {
+      const statesList = await fetchStates();
+      setStates(statesList);
+    } catch (error) {
+      console.error('Failed to load states:', error);
+    } finally {
+      setStatesLoading(false);
+    }
+  };
 
   const handleChange = (key: string, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleDateChange = (event: any, selectedDate?: Date) => {
+    setShowDatePicker(false);
+    if (selectedDate) {
+      const formattedDate = selectedDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+      handleChange("dateOfBirth", formattedDate);
+    }
+  };
+
+  const showDatePickerModal = () => {
+    setShowDatePicker(true);
+  };
+
   const handleRegister = async () => {
-    if (!form.firstName || !form.mobileNumber || !form.password) {
+    if (!form.firstName || !form.mobileNumber || !form.password || !form.userName || !form.city || !form.pincode || !form.state) {
       Alert.alert("Error", "Please fill all required fields.");
       return;
     }
@@ -181,6 +215,35 @@ export default function RegisterScreen() {
             </View>
 
             <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Username</Text>
+              <View style={styles.inputWrapper}>
+                <Icon name="user" size={18} color="#6B7280" style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Choose a username"
+                  placeholderTextColor="#9CA3AF"
+                  value={form.userName}
+                  onChangeText={(text) => handleChange("userName", text)}
+                  autoCapitalize="none"
+                />
+              </View>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>User Code</Text>
+              <View style={styles.inputWrapper}>
+                <Icon name="hash" size={18} color="#6B7280" style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter user code"
+                  placeholderTextColor="#9CA3AF"
+                  value={form.userCode}
+                  onChangeText={(text) => handleChange("userCode", text)}
+                />
+              </View>
+            </View>
+
+            <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Phone Number</Text>
               <View style={styles.inputWrapper}>
                 <Icon name="phone" size={18} color="#6B7280" style={styles.inputIcon} />
@@ -188,6 +251,7 @@ export default function RegisterScreen() {
                   style={styles.input}
                   placeholder="Enter phone number"
                   placeholderTextColor="#9CA3AF"
+                  maxLength={10}
                   value={form.mobileNumber}
                   onChangeText={(text) => handleChange("mobileNumber", text)}
                   keyboardType="phone-pad"
@@ -222,6 +286,161 @@ export default function RegisterScreen() {
                   onChangeText={(text) => handleChange("city", text)}
                 />
                 <Icon name="chevron-down" size={18} color="#6B7280" style={styles.inputIconRight} />
+              </View>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>State</Text>
+              <View style={styles.inputWrapper}>
+                {statesLoading ? (
+                  <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="small" color="#6B7280" />
+                    <Text style={styles.loadingText}>Loading states...</Text>
+                  </View>
+                ) : (
+                  <Dropdown
+                    style={styles.dropdownInput}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={states}
+                    search
+                    maxHeight={300}
+                    labelField="name"
+                    valueField="id"
+                    placeholder="Select state"
+                    searchPlaceholder="Search..."
+                    value={form.state}
+                    onChange={(item: { id: string; name: string; code?: string }) => {
+                      handleChange("state", item.id);
+                    }}
+                    renderLeftIcon={() => (
+                      <Icon 
+                        name="map-pin" 
+                        size={20} 
+                        color="#6B7280" 
+                        style={styles.inputIcon} 
+                      />
+                    )}
+                  />
+                )}
+              </View>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Pincode</Text>
+              <View style={styles.inputWrapper}>
+                <Icon name="map-pin" size={18} color="#6B7280" style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter pincode"
+                  placeholderTextColor="#9CA3AF"
+                  value={form.pincode}
+                  onChangeText={(text) => handleChange("pincode", text)}
+                  keyboardType="numeric"
+                  maxLength={6}
+                />
+              </View>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Address</Text>
+              <View style={styles.inputWrapper}>
+                <Icon name="home" size={18} color="#6B7280" style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your address"
+                  placeholderTextColor="#9CA3AF"
+                  value={form.address}
+                  onChangeText={(text) => handleChange("address", text)}
+                  multiline
+                  numberOfLines={3}
+                  textAlignVertical="top"
+                />
+              </View>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Gender</Text>
+              <View style={styles.inputWrapper}>
+                <Dropdown
+                  style={styles.dropdownInput}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  iconStyle={styles.iconStyle}
+                  data={[
+                    { id: 'male', name: 'Male' },
+                    { id: 'female', name: 'Female' },
+                    { id: 'other', name: 'Other' }
+                  ]}
+                  labelField="name"
+                  valueField="id"
+                  placeholder="Select gender"
+                  value={form.gender}
+                  onChange={(item: { id: string; name: string }) => {
+                    handleChange("gender", item.id);
+                  }}
+                  renderLeftIcon={() => (
+                    <Icon 
+                      name="user" 
+                      size={20} 
+                      color="#6B7280" 
+                      style={styles.inputIcon} 
+                    />
+                  )}
+                />
+              </View>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Date of Birth</Text>
+              <TouchableOpacity style={styles.inputWrapper} onPress={showDatePickerModal}>
+                <Icon name="calendar" size={18} color="#6B7280" style={styles.inputIcon} />
+                <Text style={[styles.datePickerText, { color: form.dateOfBirth ? "#111827" : "#9CA3AF" }]}>
+                  {form.dateOfBirth || "YYYY-MM-DD"}
+                </Text>
+              </TouchableOpacity>
+        
+              {showDatePicker && (
+                <DateTimePicker
+                  value={form.dateOfBirth ? new Date(form.dateOfBirth) : new Date()}
+                  mode="date"
+                  display={Platform.OS === "ios" ? "spinner" : "default"}
+                  maximumDate={new Date()} // DOB can't be in future
+                  onChange={handleDateChange}
+                />
+              )}
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Aadhar Card Number</Text>
+              <View style={styles.inputWrapper}>
+                <Icon name="credit-card" size={18} color="#6B7280" style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter Aadhar number"
+                  placeholderTextColor="#9CA3AF"
+                  value={form.adharCardNumber}
+                  onChangeText={(text) => handleChange("adharCardNumber", text)}
+                  keyboardType="numeric"
+                  maxLength={12}
+                />
+              </View>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Photo URL (Optional)</Text>
+              <View style={styles.inputWrapper}>
+                <Icon name="image" size={18} color="#6B7280" style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter photo URL"
+                  placeholderTextColor="#9CA3AF"
+                  value={form.photo}
+                  onChangeText={(text) => handleChange("photo", text)}
+                  autoCapitalize="none"
+                />
               </View>
             </View>
 
@@ -441,6 +660,29 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#111827",
   },
+  placeholderStyle: {
+    fontSize: 12,
+    color: "#9CA3AF",
+  },
+  selectedTextStyle: {
+    fontSize: 12,
+    color: "#111827",
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 12,
+    color: "#111827",
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  datePickerText: {
+    flex: 1,
+    fontSize: 12,
+    color: "#111827",
+    paddingVertical: 12,
+  },
   createAccountButton: {
     backgroundColor: "#000",
     paddingVertical: 10,
@@ -493,5 +735,22 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
     lineHeight: 18,
+  },
+  loadingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 10,
+  },
+  loadingText: {
+    marginLeft: 8,
+    fontSize: 12,
+    color: "#6B7280",
+  },
+  dropdownInput: {
+    backgroundColor: "transparent",
+    borderWidth: 0,
+    flex: 1,
+    paddingVertical: 10,
   },
 });
