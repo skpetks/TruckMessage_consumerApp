@@ -2,6 +2,9 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import CustomHeader from "../components/CustomHeader";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { PostStackParamList } from "../navigator/PostNavigator";
 
 type RequirementCardProps = {
   id: string;
@@ -9,6 +12,7 @@ type RequirementCardProps = {
   subtitle: string;
   icon: string;
   bgColor: string;
+  screen: string;
 };
 
 const requirements: RequirementCardProps[] = [
@@ -17,25 +21,29 @@ const requirements: RequirementCardProps[] = [
     title: "Post Load Requirement",
     subtitle: "Need a truck to transport your goods?",
     icon: "box",
-    bgColor: "#EAF2FF", // light blue
+    bgColor: "#EAF2FF",
+    screen: "PostLoad",
   },
   {
     id: "2",
     title: "Post Truck Availability",
     subtitle: "Have a truck available for transport?",
     icon: "truck",
-    bgColor: "#EFFFF3", // light green
+    bgColor: "#EFFFF3",
+    screen: "PostTruck",
   },
   {
     id: "3",
     title: "Post Driver Availability",
     subtitle: "Looking for driving opportunities?",
     icon: "user",
-    bgColor: "#F9F2FF", // light purple
+    bgColor: "#F9F2FF",
+    screen: "PostDriver",
   },
 ];
 
-const RequirementCard: React.FC<RequirementCardProps> = ({ title, subtitle, icon, bgColor }) => {
+const RequirementCard: React.FC<RequirementCardProps> = ({ title, subtitle, icon, bgColor, screen }) => {
+  const navigation = useNavigation();
   return (
     <View style={[styles.card, { backgroundColor: bgColor }]}>
       {/* Icon */}
@@ -48,7 +56,7 @@ const RequirementCard: React.FC<RequirementCardProps> = ({ title, subtitle, icon
       <Text style={styles.subtitle}>{subtitle}</Text>
 
       {/* Button */}
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(screen as never)}>
         <Icon name="plus" size={14} color="#fff" />
         <Text style={styles.buttonText}> Post Now</Text>
       </TouchableOpacity>

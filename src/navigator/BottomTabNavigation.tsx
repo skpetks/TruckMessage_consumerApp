@@ -3,7 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../pages/Home';
 import CustomBottomTab from '../components/CustomBottomTab';
 import Browse from '../pages/Browse';
-import Post from '../pages/Post';
+import PostNavigator from './PostNavigator';
 import Profile from '../pages/Profile';
 
 export type TabParamList = {
@@ -23,7 +23,7 @@ export default function BottomTabNavigation() {
   >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Browse" component={Browse} />
-      <Tab.Screen name="Post" component={Post} />
+      <Tab.Screen name="Post" component={PostNavigator} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );

@@ -1,5 +1,5 @@
 // src/screens/HomeScreen.tsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,10 @@ import {
 import Icon from "react-native-vector-icons/Feather";
 import CustomHeader from "../components/CustomHeader";
 import { hexToRgba } from "../components/color";
+import { getLoadAvailabilities, getLoadAvailabilityById } from "../services/loadAvalibility";
+import { LoadAvailabilityType } from "../types/LoadAvailability";
+import { getDriverAvailability, getDriverAvailabilityById } from "../services/driverAvailability";
+import { getTripDetailLoads } from "../services/tripDetailLoad";
 
 type Service = {
   id: string;
@@ -91,6 +95,76 @@ const opportunities: Opportunity[] = [
 const filters = ["All", "Load", "Truck", "Driver"];
 
 const HomeScreen: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+  const [loads, setLoads] = useState<LoadAvailabilityType[]>([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const data = await getLoadAvailabilities();
+      setLoads(data);
+    } catch (err) {
+      console.error("❌ API Error:", err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const fetchLoadAvailabilityById = async () => {
+    setLoading(true);
+    try {
+      const data = await getLoadAvailabilityById(2);
+      // setLoad(data);
+    } catch (err) {
+      console.error("❌ API Error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+    const fetchDriverAvailability = async () => {
+      setLoading(true);
+      try {
+        const data = await getDriverAvailability();
+        console.log("data", data);
+        // setDrivers(data);
+      } catch (err) {
+        console.error("❌ API Error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchDriver = async () => {
+      setLoading(true);
+      try {
+        const data = await getDriverAvailabilityById(1);
+        console.log("data", data);
+        // setDriver(data);
+      } catch (err) {
+        console.error("❌ API Error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchLoads = async () => {
+      setLoading(true);
+      try {
+        const data = await getTripDetailLoads();
+        console.log("data", data);
+        // setLoads(data);
+      } catch (err) {
+        console.error("❌ API Error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
   return (
     <>
     <CustomHeader userName="John Doe" location="Coimbatore" />

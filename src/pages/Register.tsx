@@ -99,7 +99,7 @@ export default function RegisterScreen() {
 
       const response = await registerUser(payload);
       console.log(response);
-      navigation.navigate('BottomTabNavigation' as never)
+      navigation.navigate('Login' as never)
     } catch (err: any) {
       Alert.alert("Error", err.message || "Something went wrong.");
     } finally {
@@ -631,6 +631,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 24,
+    paddingVertical: 0,
   },
   inputLabel: {
     fontSize: 14,
@@ -646,7 +647,7 @@ const styles = StyleSheet.create({
     borderColor: "#E5E7EB",
     borderRadius: 12,
     paddingHorizontal: 16,
-    paddingVertical: 1,
+    paddingVertical: 8,
   },
   inputIcon: {
     marginRight: 12,
@@ -681,7 +682,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 12,
     color: "#111827",
-    paddingVertical: 12,
   },
   createAccountButton: {
     backgroundColor: "#000",
@@ -751,6 +751,5 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderWidth: 0,
     flex: 1,
-    paddingVertical: 10,
   },
 });
