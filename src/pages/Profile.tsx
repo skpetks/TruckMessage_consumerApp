@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3B3B3B",
     borderRadius: 16,
     padding: 20,
-    margin: 16,
+    margin: 14,
   },
   userName: { fontSize: 16, fontWeight: "700", color: "#fff" },
   userRole: { fontSize: 12, color: "#ddd", marginTop: 2 },
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: "600",
-    marginHorizontal: 16,
+    marginHorizontal: 20,
     marginTop: 20,
     marginBottom: 10,
     color: "#333",

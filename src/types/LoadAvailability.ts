@@ -11,4 +11,3 @@ export interface LoadAvailabilityType {
     cancel: boolean;
     cancelledDate: string;  // YYYY-MM-DD
   }
-  

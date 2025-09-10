@@ -18,7 +18,7 @@ function AppContent() {
         backgroundColor="transparent"
         translucent={true}
       />
-      <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={[styles.container, { paddingTop: 45 }]}>
         <AppNavigator />
       </View>
     </>

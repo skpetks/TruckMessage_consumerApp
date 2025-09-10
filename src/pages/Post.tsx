@@ -15,7 +15,7 @@ type RequirementCardProps = {
   screen: string;
 };
 
-const requirements: RequirementCardProps[] = [
+const requirements = [
   {
     id: "1",
     title: "Post Load Requirement",
@@ -65,12 +65,23 @@ const RequirementCard: React.FC<RequirementCardProps> = ({ title, subtitle, icon
 };
 
 const PostRequirementScreen = () => {
+  const navigation = useNavigation();
   return (
     <>
-    <CustomHeader userName="John Doe" location="Coimbatore" />
+    {/* <CustomHeader userName="John Doe" location="Coimbatore" /> */}
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Icon name="arrow-left" size={24} color="#000" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Post Your Requirement</Text>
+      </View>
     <View style={styles.container}>
       {/* Header */}
-      <Text style={styles.header}>Post Your Requirement</Text>
+      <Text style={styles.header2}>Post Your Requirement</Text>
       <Text style={styles.subHeader}>
         Connect with thousands of logistics partners
       </Text>
@@ -97,11 +108,25 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+  },
+  header2: {
     fontSize: 18,
     fontWeight: "700",
     textAlign: "center",
     marginBottom: 4,
     color: "#000",
+  },
+  backButton: {
+    padding: 8,
+    marginRight: 8,
   },
   subHeader: {
     fontSize: 14,

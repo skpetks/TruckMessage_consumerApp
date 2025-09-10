@@ -8,7 +8,7 @@ export const getLoadAvailabilities = async (): Promise<LoadAvailabilityType[]> =
         {
           method: "GET",
           headers: {
-            Accept: "text/plain",
+            Accept: "application/json",
           },
         }
       );
@@ -17,13 +17,8 @@ export const getLoadAvailabilities = async (): Promise<LoadAvailabilityType[]> =
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
   
-      const text = await response.text();
-      try {
-        return JSON.parse(text);
-      } catch {
-        console.warn("Response is not valid JSON:", text);
-        return [] as LoadAvailabilityType[];
-      }
+      const data = await response.json();
+      return data.data;
     } catch (error: any) {
       console.error("Error fetching load availabilities:", error.message);
       throw error;
