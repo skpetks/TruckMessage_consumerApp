@@ -30,6 +30,7 @@ const CustomBottomTab = ({ state, descriptors, navigation }: any) => {
         // Icons
         let iconName = "home";
         if (route.name === "Browse") iconName = "list";
+        if (route.name === "MarketPlace") iconName = "list";
         if (route.name === "Post") iconName = "plus-circle";
         if (route.name === "Profile") iconName = "user";
 

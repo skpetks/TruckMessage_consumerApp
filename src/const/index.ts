@@ -10,6 +10,9 @@ export const User_Login_Otp = `${BASE_URL}/User/login-otp`;
 export const Get_States = `${BASE_URL}/State/list`;
 export const Get_Cities = `${BASE_URL}/City/list`;
 
+//Marketplace
+export const GET_MARKETPLACE_LIST = `${BASE_URL}/Dashboard/getMarketPlaceList`;
+
 //Post
 //Load Availability
 export const GET_LOAD_AVAILABILITY = `${BASE_URL}/LoadAvalibility/list`;

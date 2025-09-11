@@ -11,9 +11,9 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { hexToRgba } from "../components/color";
-import { getLoadAvailabilities } from "../services/loadAvalibility";
-import { LoadAvailabilityType } from "../types/LoadAvailability";
+import { getMarketPlaceList } from "../services/marketplace";
 import { useNavigation } from "@react-navigation/native";
+import { MarketPlaceItem } from "../types/MarketPlace";
 
 type Opportunity = {
   id: string;
@@ -62,28 +62,34 @@ const formatDate = (date: Date): string => {
 
 const MarketPlace: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<'needs' | 'buysell'>('needs');
-  const [loadData, setLoadData] = useState<LoadAvailabilityType[]>([]);
+  const [marketplaceData, setMarketplaceData] = useState<MarketPlaceItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigation = useNavigation();
 
   useEffect(() => {
-    const fetchLoadData = async () => {
+    const fetchMarketplaceData = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await getLoadAvailabilities();
-        console.log('Load data:', data);
-        setLoadData(data);
+        const data = await getMarketPlaceList();
+        console.log('Marketplace data:', data);
+        
+        // Filter data based on loadTypeName (Truck and Load)
+        const filteredData = data.filter((item: MarketPlaceItem) => 
+          item.loadTypeName === 'Truck' || item.loadTypeName === 'Load'
+        );
+        
+        setMarketplaceData(filteredData);
       } catch (err) {
-        console.error('Error fetching load data:', err);
+        console.error('Error fetching marketplace data:', err);
         setError('Failed to load data. Please try again.');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchLoadData();
+    fetchMarketplaceData();
   }, []);
 
   return (
@@ -180,9 +186,12 @@ const MarketPlace: React.FC = () => {
               setError(null);
               setLoading(true);
               // Re-fetch data
-              getLoadAvailabilities()
-                .then((data: LoadAvailabilityType[]) => {
-                  setLoadData(data);
+              getMarketPlaceList()
+                .then((data: MarketPlaceItem[]) => {
+                  const filteredData = data.filter((item: MarketPlaceItem) => 
+                    item.loadTypeName === 'Truck' || item.loadTypeName === 'Load'
+                  );
+                  setMarketplaceData(filteredData);
                   setLoading(false);
                 })
                 .catch((err: any) => {
@@ -196,18 +205,32 @@ const MarketPlace: React.FC = () => {
         </View>
       )}
 
-      {/* Load Availability Cards */}
-      {!loading && !error && loadData && Array.isArray(loadData) && loadData.length > 0 && loadData.map((item) => {
+      {/* Marketplace Cards */}
+      {!loading && !error && marketplaceData && Array.isArray(marketplaceData) && marketplaceData.length > 0 && marketplaceData.map((item) => {
         // Add null checks for date fields
         const availableFrom = item.availableFrom ? new Date(item.availableFrom) : new Date();
         const availableTo = item.availableTo ? new Date(item.availableTo) : new Date();
         const timeAgo = getTimeAgo(availableFrom);
         
+        // Determine icon and color based on loadTypeName
+        const getIconAndColor = (loadTypeName: string) => {
+          switch (loadTypeName) {
+            case 'Truck':
+              return { icon: 'truck', color: '#22c55e' };
+            case 'Load':
+              return { icon: 'package', color: '#2563eb' };
+            default:
+              return { icon: 'box', color: '#666' };
+          }
+        };
+        
+        const { icon, color } = getIconAndColor(item.loadTypeName);
+        
         return (
           <View key={item.id} style={styles.card}>
             <View style={styles.cardHeader}>
               <View style={styles.badgeRow}>
-                <Text style={styles.badgeGray}>Load Available</Text>
+                <Text style={styles.badgeGray}>{item.loadTypeName} Available</Text>
                 {item.cancel && <Text style={styles.badgeUrgent}>⚠️ Cancelled</Text>}
               </View>
               <Text style={styles.rating}>⭐ 4.5</Text>
@@ -216,10 +239,10 @@ const MarketPlace: React.FC = () => {
             {/* Title Row with Icon */}
             <View style={styles.titleRow}>
               <Icon
-                name="package"
+                name={icon}
                 size={16}
-                color="#2563eb"
-                style={{ marginRight: 6, backgroundColor: hexToRgba("#2563eb", 0.1), borderRadius: 6, padding: 4}}
+                color={color}
+                style={{ marginRight: 6, backgroundColor: hexToRgba(color, 0.1), borderRadius: 6, padding: 4}}
               />
               <Text style={styles.title}>
                 {item.pickupLocation || 'N/A'} → {item.dropLocation || 'N/A'}
@@ -268,10 +291,10 @@ const MarketPlace: React.FC = () => {
       })}
 
       {/* No Data Message */}
-      {!loading && !error && loadData && Array.isArray(loadData) && loadData.length === 0 && (
+      {!loading && !error && marketplaceData && Array.isArray(marketplaceData) && marketplaceData.length === 0 && (
         <View style={styles.noDataContainer}>
           <Icon name="package" size={48} color="#ccc" />
-          <Text style={styles.noDataText}>No load availability found</Text>
+          <Text style={styles.noDataText}>No marketplace items found</Text>
           <Text style={styles.noDataSubtext}>Check back later for new opportunities</Text>
         </View>
       )}
