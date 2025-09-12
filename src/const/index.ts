@@ -24,6 +24,7 @@ export const DRIVER_AVAILABILITY = `${BASE_URL}/DriverAvailability`;
 
 //Trip Detail Load
 export const TRIP_DETAIL_LOAD = `${BASE_URL}/TripDetailLoad`;
+export const SAVE_TRIP_DETAIL_LOAD = `${BASE_URL}/TripDetailLoad/createOrUpdate`;
 
 //Vehicle
 export const VEHICLE = `${BASE_URL}/Vehicle/getAll`;

@@ -1,4 +1,4 @@
-import { TRIP_DETAIL_LOAD } from "../const";
+import { TRIP_DETAIL_LOAD, SAVE_TRIP_DETAIL_LOAD } from "../const";
 import { TripDetailLoad, TripDetailLoadPayload } from "../types/tripDetailLoad";
 
 export const getTripDetailLoads = async (): Promise<TripDetailLoad[]> => {
@@ -28,12 +28,13 @@ export const getTripDetailLoads = async (): Promise<TripDetailLoad[]> => {
     payload: TripDetailLoadPayload
   ) => {
     try {
+      console.log("payload", payload);
       const response = await fetch(
-        TRIP_DETAIL_LOAD,
+        SAVE_TRIP_DETAIL_LOAD,
         {
           method: "POST",
           headers: {
-            Accept: "application/json", 
+            Accept: "text/plain", 
             "Content-Type": "application/json",
           },
           body: JSON.stringify(payload),
@@ -44,7 +45,8 @@ export const getTripDetailLoads = async (): Promise<TripDetailLoad[]> => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
   
-      return (await response.json()) as TripDetailLoadPayload;
+      const result = await response.json();
+      return result;
     } catch (error: any) {
       console.error("Error saving trip detail load:", error.message);
       throw error;

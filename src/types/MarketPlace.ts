@@ -11,4 +11,5 @@ export type MarketPlaceItem = {
     updateAt: string;
     cancel: boolean;
     cancelledDate: string;
+    itemTypeID: number;
   };

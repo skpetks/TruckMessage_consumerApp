@@ -113,28 +113,28 @@ export default function Login() {
       // Save user data to Redux store
       dispatch(setUser({
         user: {
-          id: "1",
-        firstName: "John",
-        lastName: "Doe",
-        userName: "john.doe",
-        userCode: "1234567890",
-        mobileNumber: "1234567890",
-        email: "john.doe@example.com",
-        city: "New York",
-        pincode: "10001",
-        state: "New York",
-        address: "123 Main St",
-        gender: "male",
-        photo: "https://via.placeholder.com/150",
-        dateOfBirth: "2000-01-01",
-        adharCardNumber: "1234567890",
-        organizationID: 1,
-        roleID: 1,
-        token: "mock-token",
-        refreshToken: "mock-refresh-token"
+        id: response.user.id, 
+        firstName: response.user.firstName,
+        lastName: response.user.lastName,
+        userName: response.user.userName,
+        userCode: response.user.userCode,
+        mobileNumber: response.user.mobileNumber,
+        email: response.user.email,
+        city: response.user.city,
+        pincode: response.user.pincode,
+        state: response.user.state,
+        address: response.user.address,
+        gender: response.user.gender,
+        photo: response.user.photo,
+        dateOfBirth: response.user.dateOfBirth,
+        adharCardNumber: response.user.adharCardNumber,
+        organizationID: response.user.organizationID,
+        roleID: response.user.roleID,
+        token: response.token,
+        refreshToken: response.refreshToken
         },
-        token: "mock-token",
-        refreshToken: "mock-refresh-token"
+        token: response.token,
+        refreshToken: response.refreshToken
       }));
       
     } catch (error) {

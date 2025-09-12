@@ -12,7 +12,7 @@ import {
 import Icon from "react-native-vector-icons/Feather";
 import { hexToRgba } from "../components/color";
 import { getMarketPlaceList } from "../services/marketplace";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { MarketPlaceItem } from "../types/MarketPlace";
 
 type Opportunity = {
@@ -67,30 +67,37 @@ const MarketPlace: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const fetchMarketplaceData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await getMarketPlaceList();
-        console.log('Marketplace data:', data);
-        
-        // Filter data based on loadTypeName (Truck and Load)
-        const filteredData = data.filter((item: MarketPlaceItem) => 
-          item.loadTypeName === 'Truck' || item.loadTypeName === 'Load'
-        );
-        
-        setMarketplaceData(filteredData);
-      } catch (err) {
-        console.error('Error fetching marketplace data:', err);
-        setError('Failed to load data. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchMarketplaceData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await getMarketPlaceList();
+      console.log('Marketplace data:', data);
+      
+      // Filter data based on loadTypeId (1 for Load, 2 for Truck)
+      const filteredData = data.filter((item: MarketPlaceItem) => 
+        item.itemTypeID === 1 || item.itemTypeID === 2
+      );
+      
+      setMarketplaceData(filteredData);
+    } catch (err) {
+      console.error('Error fetching marketplace data:', err);
+      setError('Failed to load data. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchMarketplaceData();
   }, []);
+
+  // Reload data when screen comes back into focus
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchMarketplaceData();
+    }, [])
+  );
 
   return (
     <>
@@ -183,21 +190,7 @@ const MarketPlace: React.FC = () => {
           <TouchableOpacity 
             style={styles.retryButton}
             onPress={() => {
-              setError(null);
-              setLoading(true);
-              // Re-fetch data
-              getMarketPlaceList()
-                .then((data: MarketPlaceItem[]) => {
-                  const filteredData = data.filter((item: MarketPlaceItem) => 
-                    item.loadTypeName === 'Truck' || item.loadTypeName === 'Load'
-                  );
-                  setMarketplaceData(filteredData);
-                  setLoading(false);
-                })
-                .catch((err: any) => {
-                  setError('Failed to load data. Please try again.');
-                  setLoading(false);
-                });
+              fetchMarketplaceData();
             }}
           >
             <Text style={styles.retryButtonText}>Retry</Text>
@@ -212,25 +205,25 @@ const MarketPlace: React.FC = () => {
         const availableTo = item.availableTo ? new Date(item.availableTo) : new Date();
         const timeAgo = getTimeAgo(availableFrom);
         
-        // Determine icon and color based on loadTypeName
-        const getIconAndColor = (loadTypeName: string) => {
-          switch (loadTypeName) {
-            case 'Truck':
-              return { icon: 'truck', color: '#22c55e' };
-            case 'Load':
+        // Determine icon and color based on loadTypeId
+        const getIconAndColor = (loadTypeId: number) => {
+          switch (loadTypeId) {
+            case 1: // Load
               return { icon: 'package', color: '#2563eb' };
+            case 2: // Truck
+              return { icon: 'truck', color: '#22c55e' };
             default:
               return { icon: 'box', color: '#666' };
           }
         };
         
-        const { icon, color } = getIconAndColor(item.loadTypeName);
+        const { icon, color } = getIconAndColor(item.itemTypeID);
         
         return (
           <View key={item.id} style={styles.card}>
             <View style={styles.cardHeader}>
               <View style={styles.badgeRow}>
-                <Text style={styles.badgeGray}>{item.loadTypeName} Available</Text>
+                <Text style={styles.badgeGray}>{item.itemTypeID === 1 ? 'Load' : 'Truck'} Available</Text>
                 {item.cancel && <Text style={styles.badgeUrgent}>⚠️ Cancelled</Text>}
               </View>
               <Text style={styles.rating}>⭐ 4.5</Text>
@@ -306,7 +299,7 @@ const MarketPlace: React.FC = () => {
       onPress={() => {
         // Handle add new post action
         console.log('Add new post pressed');
-        navigation.navigate('Post' as never);
+        navigation.navigate('AddPost' as never);
       }}
     >
       <Icon name="plus" size={24} color="#fff" />
