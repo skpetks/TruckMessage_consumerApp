@@ -30,10 +30,9 @@ type Opportunity = {
 };
 
 const filters = [
-  { id: "1", label: "All", icon: "apps" },
-  { id: "2", label: "Load", icon: "package" },
-  { id: "3", label: "Truck", icon: "truck" },
-  { id: "4", label: "Driver", icon: "user" },
+  { id: 0, label: "All", icon: "apps" },
+  { id: 1, label: "Load", icon: "package" },
+  { id: 2, label: "Truck", icon: "truck" },
 ];
 
 // Helper functions
@@ -65,21 +64,19 @@ const MarketPlace: React.FC = () => {
   const [marketplaceData, setMarketplaceData] = useState<MarketPlaceItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
+  const [selectedFilter, setSelectedFilter] = useState<number>(0); // 0: All, 1: Load, 2: Truck
   const navigation = useNavigation();
 
   const fetchMarketplaceData = async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await getMarketPlaceList();
+      const data = await getMarketPlaceList(searchKeyword, selectedFilter);
       console.log('Marketplace data:', data);
       
-      // Filter data based on loadTypeId (1 for Load, 2 for Truck)
-      const filteredData = data.filter((item: MarketPlaceItem) => 
-        item.itemTypeID === 1 || item.itemTypeID === 2
-      );
-      
-      setMarketplaceData(filteredData);
+      // The API already handles filtering based on filterType, so use the data directly
+      setMarketplaceData(data);
     } catch (err) {
       console.error('Error fetching marketplace data:', err);
       setError('Failed to load data. Please try again.');
@@ -88,9 +85,14 @@ const MarketPlace: React.FC = () => {
     }
   };
 
+  // Debounced search effect
   useEffect(() => {
-    fetchMarketplaceData();
-  }, []);
+    const timeoutId = setTimeout(() => {
+      fetchMarketplaceData();
+    }, 500); // 500ms delay
+
+    return () => clearTimeout(timeoutId);
+  }, [searchKeyword, selectedFilter]);
 
   // Reload data when screen comes back into focus
   useFocusEffect(
@@ -138,35 +140,43 @@ const MarketPlace: React.FC = () => {
           placeholder="Search by location, route..."
           style={styles.searchInput}
           placeholderTextColor="#888"
+          value={searchKeyword}
+          onChangeText={setSearchKeyword}
         />
       </View>
 
       {/* Filter Chips */}
       <View style={styles.filters}>
-        {filters.map((chip) => (
-          <TouchableOpacity
-            key={chip.id}
-            style={[
-              styles.chip,
-              chip.label === "All" && styles.chipActive,
-            ]}
-          >
-            <Icon
-              name={chip.icon}
-              size={14}
-              color={chip.label === "All" ? "#fff" : "#444"}
-              style={{ marginRight: 4 }}
-            />
-            <Text
+        {filters.map((chip) => {
+          const chipFilterType = parseInt(chip.id.toString());
+          const isActive = selectedFilter === chipFilterType;
+          
+          return (
+            <TouchableOpacity
+              key={chip.id}
               style={[
-                styles.chipText,
-                chip.label === "All" && styles.chipTextActive,
+                styles.chip,
+                isActive && styles.chipActive,
               ]}
+              onPress={() => setSelectedFilter(chipFilterType)}
             >
-              {chip.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              <Icon
+                name={chip.icon}
+                size={14}
+                color={isActive ? "#fff" : "#444"}
+                style={{ marginRight: 4 }}
+              />
+              <Text
+                style={[
+                  styles.chipText,
+                  isActive && styles.chipTextActive,
+                ]}
+              >
+                {chip.label}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
 
         {/* Filter Icon */}
         <TouchableOpacity style={styles.chip}>
@@ -238,20 +248,40 @@ const MarketPlace: React.FC = () => {
                 style={{ marginRight: 6, backgroundColor: hexToRgba(color, 0.1), borderRadius: 6, padding: 4}}
               />
               <Text style={styles.title}>
-                {item.pickupLocation || 'N/A'} → {item.dropLocation || 'N/A'}
+                {item.itemTypeID === 1 
+                  ? `${item.pickupLocation || 'N/A'} → ${item.dropLocation || 'N/A'}`
+                  : `Truck - Price: $${item.price || 'Contact for price'}`
+                }
               </Text>
             </View>
 
             {/* Details */}
             <View style={styles.detailsRow}>
-              <View style={styles.detailBox}>
-                <Text style={styles.detailLabel}>PICKUP</Text>
-                <Text style={styles.detailValue}>{item.pickupLocation || 'N/A'}</Text>
-              </View>
-              <View style={styles.detailBox}>
-                <Text style={styles.detailLabel}>DROP</Text>
-                <Text style={styles.detailValue}>{item.dropLocation || 'N/A'}</Text>
-              </View>
+              {item.itemTypeID === 1 ? (
+                // Load details - show pickup and drop locations
+                <>
+                  <View style={styles.detailBox}>
+                    <Text style={styles.detailLabel}>PICKUP</Text>
+                    <Text style={styles.detailValue}>{item.pickupLocation || 'N/A'}</Text>
+                  </View>
+                  <View style={styles.detailBox}>
+                    <Text style={styles.detailLabel}>DROP</Text>
+                    <Text style={styles.detailValue}>{item.dropLocation || 'N/A'}</Text>
+                  </View>
+                </>
+              ) : (
+                // Truck details - show price type and price
+                <>
+                  <View style={styles.detailBox}>
+                    <Text style={styles.detailLabel}>PRICE TYPE</Text>
+                    <Text style={styles.detailValue}>{item.priceType || 'Per Day'}</Text>
+                  </View>
+                  <View style={styles.detailBox}>
+                    <Text style={styles.detailLabel}>PRICE</Text>
+                    <Text style={styles.detailValue}>${item.price || 'Contact'}</Text>
+                  </View>
+                </>
+              )}
             </View>
 
             <View style={styles.detailsRow}>

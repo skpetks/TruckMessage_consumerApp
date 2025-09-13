@@ -85,6 +85,23 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    // Add flavorDimensions
+    flavorDimensions "default"
+
+    // Define product flavors
+    productFlavors {
+        staging {
+            dimension "default"
+            applicationId "com.myapp.staging"
+            versionNameSuffix "-staging"
+        }
+        production {
+            dimension "default"
+            applicationId "com.mrdesigner.truckmessage"
+        }
+    }
+
     signingConfigs {
         debug {
             storeFile file('debug.keystore')

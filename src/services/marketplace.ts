@@ -1,8 +1,10 @@
 import { GET_MARKETPLACE_LIST } from "../const";
 
-export const getMarketPlaceList = async (filterType: number = 0): Promise<any> => {
+export const getMarketPlaceList = async (keyword: string, filterType: number): Promise<any> => {
   try {
-    const response = await fetch(`${GET_MARKETPLACE_LIST}?filterType=${filterType}`, {
+    console.log('Keyword:', keyword);
+    console.log('Filter Type:', filterType);
+    const response = await fetch(`${GET_MARKETPLACE_LIST}?keyword=${keyword}&filterType=${filterType}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
