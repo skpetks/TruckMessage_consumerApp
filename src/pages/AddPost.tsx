@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,12 +11,15 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import { Dropdown } from 'react-native-element-dropdown';
 import colors from '../components/color';
 import { useNavigation } from '@react-navigation/native';
 import { saveLoadAvailability } from '../services/loadAvalibility';
 import { saveTripDetailLoad } from '../services/tripDetailLoad';
 import { LoadAvailabilityType } from '../types/LoadAvailability';
 import { TripDetailLoadPayload } from '../types/tripDetailLoad';
+import { getTruckTypes, getTruckBodyTypes } from '../services/vehicle';
+import { TruckType, TruckBodyType } from '../types/vehicle';
 
 const AddPost = () => {
   const navigation = useNavigation();
@@ -38,11 +41,39 @@ const AddPost = () => {
   const [material, setMaterial] = useState('');
   
   // Truck specific fields
-  const [truckType, setTruckType] = useState('');
-  const [truckBodyType, setTruckBodyType] = useState('');
+  const [truckType, setTruckType] = useState<TruckType | null>(null);
+  const [truckBodyType, setTruckBodyType] = useState<TruckBodyType | null>(null);
   const [numberOfTyres, setNumberOfTyres] = useState('');
   const [capacity, setCapacity] = useState('');
   
+  // Dropdown data states
+  const [truckTypes, setTruckTypes] = useState<TruckType[]>([]);
+  const [truckBodyTypes, setTruckBodyTypes] = useState<TruckBodyType[]>([]);
+  const [isLoadingDropdowns, setIsLoadingDropdowns] = useState(false);
+  
+  // Fetch truck types and truck body types on component mount
+  useEffect(() => {
+    const fetchDropdownData = async () => {
+      setIsLoadingDropdowns(true);
+      try {
+        const [truckTypesData, truckBodyTypesData] = await Promise.all([
+          getTruckTypes(),
+          getTruckBodyTypes()
+        ]);
+        console.log('Truck Types Data:', truckTypesData);
+        console.log('Truck Body Types Data:', truckBodyTypesData);
+        setTruckTypes(truckTypesData);
+        setTruckBodyTypes(truckBodyTypesData);
+      } catch (error) {
+        console.error('Error fetching dropdown data:', error);
+        Alert.alert('Error', 'Failed to load truck types. Please try again.');
+      } finally {
+        setIsLoadingDropdowns(false);
+      }
+    };
+
+    fetchDropdownData();
+  }, []);
 
   const handleBack = () => {
     // Navigation back logic
@@ -96,12 +127,12 @@ const AddPost = () => {
 
     // Truck specific validation
     if (selectedNeed === 'truck') {
-      if (!truckType.trim()) {
-        Alert.alert('Error', 'Please enter the truck type');
+      if (!truckType) {
+        Alert.alert('Error', 'Please select the truck type');
         return false;
       }
-      if (!truckBodyType.trim()) {
-        Alert.alert('Error', 'Please enter the truck body type');
+      if (!truckBodyType) {
+        Alert.alert('Error', 'Please select the truck body type');
         return false;
       }
       if (!capacity.trim()) {
@@ -156,7 +187,7 @@ const AddPost = () => {
         // Save as Trip Detail Load
         const tripDetailLoadData = {
           id: 0, // You can make this dynamic or use 0 for new records
-          truck: `${truckType} - ${truckBodyType}`,
+          truck: `${truckType?.name || ''} - ${truckBodyType?.bodyTypeName || ''}`,
           userId: 0, // This should come from user context/auth
           postUserID: 0, // This should come from user context/auth
           organizationName: 'string',
@@ -167,7 +198,7 @@ const AddPost = () => {
           toLocation: toLocation || 'N/A',
           material: material,
           ton: parseFloat(capacity) || 0,
-          truckBodyType: truckBodyType,
+          truckBodyType: truckBodyType?.bodyTypeName || '',
           description: description || title,
           numberOfTyres: parseInt(numberOfTyres) || 0,
           createdAt: currentDate,
@@ -191,8 +222,8 @@ const AddPost = () => {
       setLoadType('');
       setWeight('');
       setMaterial('');
-      setTruckType('');
-      setTruckBodyType('');
+      setTruckType(null);
+      setTruckBodyType(null);
       setNumberOfTyres('');
       setCapacity('');
       setSelectedNeed(null);
@@ -378,23 +409,63 @@ const AddPost = () => {
           <>
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Truck Type *</Text>
-              <TextInput
-                style={styles.textInput}
-                placeholder="e.g. Tata, Ashok Leyland, etc."
+              <Dropdown
+                style={styles.dropdown}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                itemTextStyle={styles.itemTextStyle}
+                data={truckTypes}
+                search
+                maxHeight={300}
+                labelField="name"
+                valueField="id"
+                placeholder={isLoadingDropdowns ? "Loading..." : "Select truck type"}
+                searchPlaceholder="Search truck type..."
                 value={truckType}
-                onChangeText={setTruckType}
-                placeholderTextColor="#999"
+                onChange={item => {
+                  setTruckType(item);
+                }}
+                renderLeftIcon={() => (
+                  <Icon
+                    style={styles.icon}
+                    color="black"
+                    name="truck"
+                    size={20}
+                  />
+                )}
               />
             </View>
 
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Truck Body Type *</Text>
-              <TextInput
-                style={styles.textInput}
-                placeholder="e.g. Flatbed, Container, Tipper, etc."
+              <Dropdown
+                style={styles.dropdown}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                itemTextStyle={styles.itemTextStyle}
+                data={truckBodyTypes}
+                search
+                maxHeight={300}
+                labelField="bodyTypeName"
+                valueField="id"
+                placeholder={isLoadingDropdowns ? "Loading..." : "Select truck body type"}
+                searchPlaceholder="Search truck body type..."
                 value={truckBodyType}
-                onChangeText={setTruckBodyType}
-                placeholderTextColor="#999"
+                onChange={item => {
+                  setTruckBodyType(item);
+                }}
+                renderLeftIcon={() => (
+                  <Icon
+                    style={styles.icon}
+                    color="black"
+                    name="package"
+                    size={20}
+                  />
+                )}
               />
             </View>
 
@@ -647,6 +718,37 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
+  },
+  dropdown: {
+    height: 50,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#fff',
+  },
+  icon: {
+    marginRight: 5,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+    color: '#999',
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    color: '#000',
+  },
+  itemTextStyle: {
+    fontSize: 16,
+    color: '#000',
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
   },
 });
 

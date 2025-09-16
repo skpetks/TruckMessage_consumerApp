@@ -31,3 +31,5 @@ export const VEHICLE = `${BASE_URL}/Vehicle/getAll`;
 export const VEHICLE_BY_ID = `${BASE_URL}/Vehicle/get`;
 export const CREATE_VEHICLE = `${BASE_URL}/Vehicle/create`;
 export const DELETE_VEHICLE = `${BASE_URL}/Vehicle/delete`;
+export const TRUCK_BODY_TYPE = `${BASE_URL}/TruckBodyType/list`;
+export const TRUCK_TYPE = `${BASE_URL}/TruckType`;

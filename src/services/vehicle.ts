@@ -1,5 +1,5 @@
-import { CREATE_VEHICLE, DELETE_VEHICLE, VEHICLE, VEHICLE_BY_ID } from "../const";
-import { CreateVehicleRequest, Vehicle } from "../types/vehicle";
+import { CREATE_VEHICLE, DELETE_VEHICLE, TRUCK_BODY_TYPE, TRUCK_TYPE, VEHICLE, VEHICLE_BY_ID } from "../const";
+import { CreateVehicleRequest, TruckBodyType, TruckType, Vehicle } from "../types/vehicle";
 
 export const getAllVehicles = async (): Promise<Vehicle[]> => {
     try {
@@ -84,7 +84,7 @@ export const getAllVehicles = async (): Promise<Vehicle[]> => {
         {
           method: "DELETE",
           headers: {
-            Accept: "application/json", // 👈 expecting JSON back
+            Accept: "application/json",
           },
         }
       );
@@ -101,5 +101,46 @@ export const getAllVehicles = async (): Promise<Vehicle[]> => {
     } catch (error: any) {
       console.error("Error deleting vehicle:", error.message);
       return { success: false, message: error.message };
+    }
+  };
+
+  export const getTruckBodyTypes = async (): Promise<TruckBodyType[]> => {
+    try {
+      const response = await fetch(TRUCK_BODY_TYPE, {
+        method: "GET",
+        headers: {
+          Accept: "*/*", 
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      return data.data;
+    } catch (error) {
+      console.error("Error fetching truck body types:", error);
+      throw error;
+    }
+  };
+
+  export const getTruckTypes = async (): Promise<TruckType[]> => {
+    try {
+      const response = await fetch(TRUCK_TYPE, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      return data.data;
+    } catch (error) {
+      console.error("Error fetching truck types:", error);
+      throw error;
     }
   };

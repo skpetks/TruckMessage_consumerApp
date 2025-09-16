@@ -24,3 +24,17 @@ export type Vehicle = {
     createdAt: string;
     updatedAt: string;
   }
+
+  export type TruckBodyType = {
+    id: number;
+    bodyTypeName: string;
+    description: string;
+  }
+
+  export type TruckType = {
+    id: number;
+    name: string;
+    description: string;
+    createdAt: string;
+    updatedAt: string;
+  }
