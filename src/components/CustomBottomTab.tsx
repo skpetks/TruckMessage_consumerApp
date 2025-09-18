@@ -29,9 +29,8 @@ const CustomBottomTab = ({ state, descriptors, navigation }: any) => {
 
         // Icons
         let iconName = "home";
-        if (route.name === "Browse") iconName = "list";
-        if (route.name === "MarketPlace") iconName = "list";
-        if (route.name === "Post") iconName = "plus-circle";
+        if (route.name === "MarketPlace") iconName = "shopping-bag";
+        if (route.name === "Help") iconName = "help-circle";
         if (route.name === "Profile") iconName = "user";
 
         return (
@@ -43,13 +42,13 @@ const CustomBottomTab = ({ state, descriptors, navigation }: any) => {
           >
             <Icon
               name={iconName}
-              size={18}
-              color={isFocused ? "#fff" : "#333"}
+              size={20}
+              color={isFocused ? "#1E40AF" : "#6B7280"}
             />
             <Text
               style={[
                 styles.tabItemText,
-                { color: isFocused ? "#fff" : "#333" },
+                { color: isFocused ? "#1E40AF" : "#6B7280" },
               ]}
             >
               {label}
@@ -68,28 +67,33 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#fff",
     borderTopWidth: 1,
-    borderColor: "#eee",
-    height: 65,
-    paddingHorizontal: 10,
+    borderColor: "#E5E7EB",
+    height: 70,
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 8,
     justifyContent: "space-around",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
   },
   tabItem: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 6,
-    marginHorizontal: 6,
-    borderRadius: 30, // make pill effect
-    // flexDirection: "row",
-    gap: 6,
+    paddingVertical: 8,
+    marginHorizontal: 4,
+    borderRadius: 12,
+    gap: 4,
   },
   tabItemActive: {
-    backgroundColor: "#000", // dark active background
-    paddingHorizontal: 16, // extra width for pill
+    backgroundColor: "rgba(30, 64, 175, 0.1)",
   },
   tabItemText: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: "500",
   },
 });

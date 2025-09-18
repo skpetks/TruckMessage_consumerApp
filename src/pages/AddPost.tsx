@@ -288,7 +288,7 @@ const AddPost = () => {
         </View>
 
         {/* I need a section */}
-        <Text style={styles.needTitle}>I need a</Text>
+        {/* <Text style={styles.needTitle}>I need a</Text> */}
         <View style={styles.radioContainer}>
           {['truck', 'load'].map((item) => (
             <TouchableOpacity

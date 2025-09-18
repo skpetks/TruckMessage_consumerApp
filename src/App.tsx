@@ -8,7 +8,7 @@ import AppNavigator from './navigator/AppNavigator';
 
 // Wrapper component that can use the useSafeAreaInsets hook
 function AppContent() {
-  const isDarkMode = useColorScheme() === 'dark';
+  const isDarkMode = useColorScheme() === 'light';
   const insets = useSafeAreaInsets();
 
   return (
@@ -18,7 +18,7 @@ function AppContent() {
         backgroundColor="transparent"
         translucent={true}
       />
-      <View style={[styles.container, { paddingTop: 45 }]}>
+      <View style={[styles.container, { paddingTop: 0 }]}>
         <AppNavigator />
       </View>
     </>

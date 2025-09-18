@@ -9,10 +9,10 @@ import MarketPlaceNavigator from './MarketPlaceNavigator';
 
 export type TabParamList = {
   Home: undefined;
-  Browse: undefined;
   MarketPlace: undefined;
-  Post: undefined;
+  Help: undefined;
   Profile: undefined;
+  More: undefined;
 };
 
 const Tab = createBottomTabNavigator<TabParamList>();
@@ -24,10 +24,10 @@ export default function BottomTabNavigation() {
     tabBar={(props) => <CustomBottomTab {...props} />}
   >
       <Tab.Screen name="Home" component={Home} />
-      {/* <Tab.Screen name="Browse" component={Browse} /> */}
       <Tab.Screen name="MarketPlace" component={MarketPlaceNavigator} />
-      {/* <Tab.Screen name="Post" component={PostNavigator} /> */}
+      <Tab.Screen name="Help" component={Browse} />
       <Tab.Screen name="Profile" component={Profile} />
+      {/* <Tab.Screen name="More" component={Browse} /> */}
     </Tab.Navigator>
   );
 }
