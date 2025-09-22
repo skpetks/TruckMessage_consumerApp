@@ -13,6 +13,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
 import MetrialIcons from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomHeader from '../components/CustomHeader';
 import { hexToRgba } from '../components/color';
@@ -75,18 +76,36 @@ const serviceCards: ServiceCard[] = [
 ];
 
 const utilityIcons: UtilityIcon[] = [
-  { id: '1', icon: <MetrialIcons name="speed" size={24} color="#6B46C1" />, label: 'Mileage calculator' },
-  { id: '2', icon: <MetrialIcons name="toll" size={24} color="#6B46C1" />, label: 'Toll calculator' },
-  { id: '3', icon: <Icon name="file-text" size={24} color="#6B46C1" />, label: 'Trip accounts' },
-  { id: '4', icon: <Icon name="droplet" size={24} color="#6B46C1" />, label: 'Prime petrol bunks' },
+  {
+    id: '1',
+    icon: <MetrialIcons name="speed" size={24} color="#6B46C1" />,
+    label: 'Mileage calculator',
+  },
+  {
+    id: '2',
+    icon: <MetrialIcons name="toll" size={24} color="#6B46C1" />,
+    label: 'Toll calculator',
+  },
+  {
+    id: '3',
+    icon: <Icon name="file-text" size={24} color="#6B46C1" />,
+    label: 'Trip accounts',
+  },
+  {
+    id: '4',
+    icon: <Icon name="droplet" size={24} color="#6B46C1" />,
+    label: 'Prime petrol bunks',
+  },
 ];
 
 // Helper function to format time ago
 const getTimeAgo = (dateString: string): string => {
   const now = new Date();
   const postDate = new Date(dateString);
-  const diffInHours = Math.floor((now.getTime() - postDate.getTime()) / (1000 * 60 * 60));
-  
+  const diffInHours = Math.floor(
+    (now.getTime() - postDate.getTime()) / (1000 * 60 * 60),
+  );
+
   if (diffInHours < 1) return 'Just now';
   if (diffInHours < 24) return `${diffInHours} hours ago`;
   const diffInDays = Math.floor(diffInHours / 24);
@@ -96,10 +115,10 @@ const getTimeAgo = (dateString: string): string => {
 // Helper function to format date
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-GB', { 
-    day: '2-digit', 
-    month: 'short', 
-    year: 'numeric' 
+  return date.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
   });
 };
 
@@ -118,7 +137,7 @@ const HomeScreen: React.FC = () => {
     try {
       const [loadsData, marketplaceList] = await Promise.all([
         getLoadAvailabilities(),
-        getMarketPlaceList('', 0) // Empty keyword and filterType 0 for all items
+        getMarketPlaceList('', 0), // Empty keyword and filterType 0 for all items
       ]);
       setLoads(loadsData);
       setMarketplaceData(marketplaceList);
@@ -193,21 +212,29 @@ const HomeScreen: React.FC = () => {
 
       <View style={styles.postRoute}>
         <Icon name="map-pin" size={14} color="#6B46C1" />
-        <Text style={styles.postRouteText}>{item.pickupLocation} {'->'} {item.dropLocation}</Text>
+        <Text style={styles.postRouteText}>
+          {item.pickupLocation} {'->'} {item.dropLocation}
+        </Text>
       </View>
 
       <View style={styles.postDetails}>
         <View style={styles.postDetailItem}>
           <Text style={styles.postDetailLabel}>PICKUP DATE</Text>
-          <Text style={styles.postDetailValue}>{formatDate(item.availableFrom)}</Text>
+          <Text style={styles.postDetailValue}>
+            {formatDate(item.availableFrom)}
+          </Text>
         </View>
         <View style={styles.postDetailItem}>
           <Text style={styles.postDetailLabel}>DELIVERY DATE</Text>
-          <Text style={styles.postDetailValue}>{formatDate(item.availableTo)}</Text>
+          <Text style={styles.postDetailValue}>
+            {formatDate(item.availableTo)}
+          </Text>
         </View>
         <View style={styles.postDetailItem}>
           <Text style={styles.postDetailLabel}>PRICE</Text>
-          <Text style={styles.postDetailValue}>{item.price ? `₹${item.price}` : 'Contact'}</Text>
+          <Text style={styles.postDetailValue}>
+            {item.price ? `₹${item.price}` : 'Contact'}
+          </Text>
         </View>
       </View>
 
@@ -225,10 +252,7 @@ const HomeScreen: React.FC = () => {
             <Icon name="phone" size={16} color="#fff" />
           </TouchableOpacity>
           <TouchableOpacity
-            style={[
-              styles.actionButton,
-              { backgroundColor: '#6B7280' },
-            ]}
+            style={[styles.actionButton, { backgroundColor: '#6B7280' }]}
           >
             <Icon name="message-circle" size={16} color="#fff" />
           </TouchableOpacity>
@@ -266,15 +290,21 @@ const HomeScreen: React.FC = () => {
       <View style={styles.truckDetails}>
         <View style={styles.truckDetailItem}>
           <Text style={styles.truckDetailLabel}>AVAILABLE FROM</Text>
-          <Text style={styles.truckDetailValue}>{formatDate(item.availableFrom)}</Text>
+          <Text style={styles.truckDetailValue}>
+            {formatDate(item.availableFrom)}
+          </Text>
         </View>
         <View style={styles.truckDetailItem}>
           <Text style={styles.truckDetailLabel}>AVAILABLE TO</Text>
-          <Text style={styles.truckDetailValue}>{formatDate(item.availableTo)}</Text>
+          <Text style={styles.truckDetailValue}>
+            {formatDate(item.availableTo)}
+          </Text>
         </View>
         <View style={styles.truckDetailItem}>
           <Text style={styles.truckDetailLabel}>RATE</Text>
-          <Text style={styles.truckDetailValue}>{item.price ? `₹${item.price}` : 'Contact'}</Text>
+          <Text style={styles.truckDetailValue}>
+            {item.price ? `₹${item.price}` : 'Contact'}
+          </Text>
         </View>
       </View>
 
@@ -292,10 +322,7 @@ const HomeScreen: React.FC = () => {
             <Icon name="phone" size={16} color="#fff" />
           </TouchableOpacity>
           <TouchableOpacity
-            style={[
-              styles.truckActionButton,
-              { backgroundColor: '#6B7280' },
-            ]}
+            style={[styles.truckActionButton, { backgroundColor: '#6B7280' }]}
           >
             <Icon name="message-circle" size={16} color="#fff" />
           </TouchableOpacity>
@@ -314,22 +341,17 @@ const HomeScreen: React.FC = () => {
       >
         {/* Header Section */}
         <View style={styles.header}>
-            <View style={styles.locationContainer}>
-              <Text style={styles.locationText}>You are in</Text>
-              <Text style={styles.locationName}>Avinashi Road, Coimbatore</Text>
+          <View style={styles.locationContainer}>
+            <Text style={styles.locationText}>You are in</Text>
+            <Text style={styles.locationName}>Avinashi Road, Coimbatore</Text>
+          </View>
+          <View style={styles.headerRight}>
+            <View style={styles.walletContainer}>
+              <Icon name="credit-card" size={16} color="#fff" />
+              <Text style={styles.walletText}>0</Text>
             </View>
-            <View style={styles.headerRight}>
-              <View style={styles.walletContainer}>
-                <Icon name="credit-card" size={16} color="#fff" />
-                <Text style={styles.walletText}>0</Text>
-              </View>
-              <Icon
-                name="bell"
-                size={20}
-                color="#fff"
-                style={styles.bellIcon}
-              />
-            </View>
+            <Icon name="bell" size={20} color="#fff" style={styles.bellIcon} />
+          </View>
         </View>
 
         <ScrollView
@@ -369,13 +391,13 @@ const HomeScreen: React.FC = () => {
           {/* Utility Icons */}
           <View style={styles.utilityIconsContainer}>
             {utilityIcons.map(utility => (
-              <TouchableOpacity key={utility.id} style={styles.utilityIcon}>
-                <View style={styles.utilityIconCircle}>
+              <View key={utility.id} style={styles.utilityIcon}>
+                <TouchableOpacity style={styles.utilityIconCircle}>
                   {/* <Icon name={utility.icon} size={24} color="#6B46C1" /> */}
                   {utility.icon}
-                </View>
+                </TouchableOpacity>
                 <Text style={styles.utilityIconLabel}>{utility.label}</Text>
-              </TouchableOpacity>
+              </View>
             ))}
           </View>
 
@@ -385,16 +407,24 @@ const HomeScreen: React.FC = () => {
 
             {/* Purple Banner */}
             <View style={styles.purpleBanner}>
-              <TouchableOpacity style={styles.bannerContent} onPress={handleBannerPress}>
-                <View style={styles.bannerIcons}>
-                  <Icon name="truck" size={20} color="#8B5CF6" />
-                  <Icon name="user" size={20} color="#8B5CF6" />
-                  <Icon name="package" size={20} color="#8B5CF6" />
+              <TouchableOpacity
+                style={styles.bannerContent}
+                onPress={handleBannerPress}
+              >
+                <View style={[styles.bannerIcons,{right: 0, zIndex: 3}]}>
+                  <FontAwesome6 name="truck" size={20} color="#3902A1" />
                 </View>
+                <View style={[styles.bannerIcons,{right: 15, zIndex: 2}]}>
+                  <FontAwesome6 name="user-large" size={20} color="#3902A1" />
+                </View>
+                <View style={[styles.bannerIcons,{right: 25, zIndex: 1}]}>
+                  <FontAwesome6 name="box" size={20} color="#3902A1" />
+                </View>
+
                 <Text style={styles.bannerText}>
                   Need a truck, driver, or load? Post in seconds.
                 </Text>
-                <Icon name="arrow-right" size={20} color="#8B5CF6" />
+                <Icon name="arrow-right" size={20} color="#3902A1" />
               </TouchableOpacity>
             </View>
 
@@ -405,13 +435,20 @@ const HomeScreen: React.FC = () => {
               </View>
             ) : marketplaceData.length > 0 ? (
               <>
-                {marketplaceData.slice(0, 6).map((item) => 
-                  item.itemTypeID === 1 ? renderLoadCard(item) : renderTruckCard(item)
-                )}
-                
+                {marketplaceData
+                  .slice(0, 6)
+                  .map(item =>
+                    item.itemTypeID === 1
+                      ? renderLoadCard(item)
+                      : renderTruckCard(item),
+                  )}
+
                 {/* View More Button */}
                 {marketplaceData.length > 6 && (
-                  <TouchableOpacity style={styles.viewMoreButton} onPress={handleViewMore}>
+                  <TouchableOpacity
+                    style={styles.viewMoreButton}
+                    onPress={handleViewMore}
+                  >
                     <Text style={styles.viewMoreText}>View More</Text>
                     <Icon name="arrow-right" size={16} color="#6B46C1" />
                   </TouchableOpacity>
@@ -448,7 +485,6 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   headerTop: {
-  
     marginBottom: 15,
   },
   timeText: {
@@ -565,7 +601,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   utilityIconLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: '#000',
     textAlign: 'center',
     fontWeight: '500',
@@ -574,15 +610,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   recentPostsTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: '#000',
     marginBottom: 15,
   },
   purpleBanner: {
-    backgroundColor: '#EEE6FF',
+    backgroundColor: '#F5F0FF',
     borderWidth: 1,
-    borderColor: '#8B5CF6',
+    borderColor: '#3902A1',
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
@@ -594,11 +630,22 @@ const styles = StyleSheet.create({
   },
   bannerIcons: {
     flexDirection: 'row',
+    padding: 10,
     gap: 8,
+    borderRadius: 25,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   bannerText: {
     flex: 1,
-    color: '#8B5CF6',
+    color: '#3902A1',
     fontSize: 14,
     fontWeight: '500',
     marginHorizontal: 12,

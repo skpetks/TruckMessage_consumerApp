@@ -21,7 +21,7 @@ const MarketPlaceNavigator = () => {
   const Stack = createNativeStackNavigator<MarketPlaceStackParamList>();
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="MarketPlace" component={MarketPlace} />
+      <Stack.Screen name="MarketPlace" component={MarketPlace} options={{headerShown: false}} />
       <Stack.Screen name="AddPost" component={AddPost} />
       <Stack.Screen name="Post" component={PostRequirementScreen} />
       <Stack.Screen name="PostLoad" component={PostLoad} />

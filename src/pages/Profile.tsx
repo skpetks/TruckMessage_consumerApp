@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  Image,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
+import LinearGradient from 'react-native-linear-gradient';
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   clearUser,
@@ -52,93 +54,105 @@ const Profile = () => {
 
   return (
     <ScrollView style={styles.container}>
-      {/* Header Card */}
-      <View style={styles.headerCard}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Icon name="user" size={40} color="#fff" style={{ marginRight: 10, backgroundColor: "rgba(255,255,255,0.2)", borderRadius: 10, padding: 4 }} />
-          <View>
-            <Text style={styles.userName}>
-              {user.firstName} {user.lastName}
-            </Text>
-            <Text style={styles.userRole}>Truck Owner</Text>
-            <Text style={styles.userPhone}>{user.mobileNumber}</Text>
+      {/* Gradient Header */}
+      <LinearGradient
+        colors={['#3802E8', '#B978C2','#FFB578']}
+        locations={[0, 0.5, 2]}
+        style={styles.gradientHeader}
+      >
+        {/* Profile Picture */}
+        <View style={styles.profilePictureContainer}>
+          <View style={styles.profilePicture}>
+            <Icon name="user" size={40} color="#8B5CF6" />
           </View>
-          </View>
-          <TouchableOpacity style={styles.editBtn}>
-            <Text style={styles.editBtnText}>Edit</Text>
-          </TouchableOpacity>
         </View>
 
-        {/* Stats */}
-        <View style={styles.statsRow}>
-          <View style={styles.statBox}>
-            <Text style={styles.statValue}>24</Text>
-            <Text style={styles.statLabel}>Active Loads</Text>
-          </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statValue}>4.8</Text>
-            <Text style={styles.statLabel}>Rating</Text>
-          </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statValue}>156</Text>
-            <Text style={styles.statLabel}>Completed</Text>
-          </View>
+        {/* User Name */}
+        <Text style={styles.userName}>
+          {user.firstName} {user.lastName}
+        </Text>
+
+        {/* Follower/Following Count */}
+        <Text style={styles.followerCount}>100 followers • 2 following</Text>
+
+        {/* Rating Badge */}
+        <View style={styles.ratingBadge}>
+          <Text style={styles.ratingText}>4.5 stars</Text>
+        </View>
+      </LinearGradient>
+
+      {/* Statistics Cards */}
+      <View style={styles.statsContainer}>
+        <View style={styles.statCard}>
+          <Text style={styles.statValue}>100</Text>
+          <Text style={styles.statLabel}>Connects</Text>
+        </View>
+        <View style={styles.statCard}>
+          <Text style={styles.statValue}>67</Text>
+          <Text style={styles.statLabel}>Calls</Text>
+        </View>
+        <View style={styles.statCard}>
+          <Text style={styles.statValue}>83</Text>
+          <Text style={styles.statLabel}>Messages</Text>
+        </View>
+        <View style={styles.statCard}>
+          <Text style={styles.statValue}>36</Text>
+          <Text style={styles.statLabel}>Orders</Text>
         </View>
       </View>
 
-      {/* Quick Actions */}
-      <Text style={styles.sectionTitle}>Quick Actions</Text>
-      <View style={styles.quickActions}>
-        <TouchableOpacity style={styles.quickCard}>
-          <Icon name="file-text" size={24} color="#4A6CF7" style={{ backgroundColor: hexToRgba("#4A6CF7", 0.1), borderRadius: 10, padding: 4 }} />
-          <Text style={styles.quickTitle}>FASTag History</Text>
-          <Text style={styles.quickSubtitle}>View transactions</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.quickCard}>
-          <Icon name="shield" size={24} color="#27AE60" style={{ backgroundColor: hexToRgba("#27AE60", 0.1), borderRadius: 10, padding: 4 }} />
-          <Text style={styles.quickTitle}>Insurance Docs</Text>
-          <Text style={styles.quickSubtitle}>Download policies</Text>
-        </TouchableOpacity>
+      {/* Rewards Section */}
+      <View style={styles.rewardsCard}>
+        <View style={styles.rewardsIcon}>
+          <Icon name="truck" size={24} color="#fff" />
+        </View>
+        <View style={styles.rewardsContent}>
+          <Text style={styles.rewardsTitle}>Refer a user to earn rewards</Text>
+          <Text style={styles.rewardsSubtitle}>Use rewards to make in-app purchases</Text>
+        </View>
+        <Icon name="chevron-right" size={20} color="#8B5CF6" />
       </View>
 
       {/* Account Section */}
       <Text style={styles.sectionTitle}>Account</Text>
-      <TouchableOpacity style={styles.listItem}>
-        <Icon name="truck" size={20} color="#666" style={{ backgroundColor: hexToRgba("#666", 0.1), borderRadius: 10, padding: 4 }} />
-        <View style={styles.listTextBox}>
-          <Text style={styles.listTitle}>My Vehicles</Text>
-          <Text style={styles.listSubtitle}>Manage 10 vehicles</Text>
-        </View>
-        <Icon name="chevron-right" size={20} color="#999" />
-      </TouchableOpacity>
+      <View style={styles.sectionContainer}>
+        <TouchableOpacity style={styles.listItem}>
+          <View style={styles.listTextBox}>
+            <Text style={styles.listTitle}>My wallet (0.00 INR available)</Text>
+            <Text style={styles.walletAmount}>0.00 INR available</Text>
+          </View>
+          <Icon name="chevron-right" size={20} color="#999" />
+        </TouchableOpacity>
+        
+        <View style={styles.separator} />
+        
+        <TouchableOpacity style={styles.listItem}>
+          <View style={styles.listTextBox}>
+            <Text style={styles.listTitle}>Account statement</Text>
+          </View>
+          <Icon name="chevron-right" size={20} color="#999" />
+        </TouchableOpacity>
+        
+        <View style={styles.separator} />
+        
+        <TouchableOpacity style={styles.listItem}>
+          <View style={styles.listTextBox}>
+            <Text style={styles.listTitle}>My Bookings</Text>
+          </View>
+          <Icon name="chevron-right" size={20} color="#999" />
+        </TouchableOpacity>
+      </View>
 
-      <TouchableOpacity style={styles.listItem}>
-        <Icon name="credit-card" size={20} color="#666" style={{ backgroundColor: hexToRgba("#666", 0.1), borderRadius: 10, padding: 4 }} />
-        <View style={styles.listTextBox}>
-          <Text style={styles.listTitle}>Transaction History</Text>
-          <Text style={styles.listSubtitle}>View all payments</Text>
-        </View>
-        <Icon name="chevron-right" size={20} color="#999" />
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.listItem}>
-        <Icon name="settings" size={20} color="#666" style={{ backgroundColor: hexToRgba("#666", 0.1), borderRadius: 10, padding: 4 }} />
-        <View style={styles.listTextBox}>
-          <Text style={styles.listTitle}>Settings</Text>
-          <Text style={styles.listSubtitle}>App preferences</Text>
-        </View>
-        <Icon name="chevron-right" size={20} color="#999" />
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.listItem}>
-        <Icon name="help-circle" size={20} color="#666" style={{ backgroundColor: hexToRgba("#666", 0.1), borderRadius: 10, padding: 4 }} />
-        <View style={styles.listTextBox}>
-          <Text style={styles.listTitle}>Help & Support</Text>
-          <Text style={styles.listSubtitle}>Get assistance</Text>
-        </View>
-        <Icon name="chevron-right" size={20} color="#999" />
-      </TouchableOpacity>
+      {/* Personal Information Section */}
+      <Text style={styles.sectionTitle}>Personal information</Text>
+      <View style={styles.sectionContainer}>
+        <TouchableOpacity style={styles.listItem}>
+          <View style={styles.listTextBox}>
+            <Text style={styles.listTitle}>Edit Profile</Text>
+          </View>
+          <Icon name="chevron-right" size={20} color="#999" />
+        </TouchableOpacity>
+      </View>
 
       {/* Logout Button */}
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
@@ -151,107 +165,209 @@ const Profile = () => {
 export default Profile;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f5f5f5" },
-
-  headerCard: {
-    backgroundColor: "#3B3B3B",
-    borderRadius: 16,
-    padding: 20,
-    margin: 14,
-  },
-  userName: { fontSize: 16, fontWeight: "700", color: "#fff" },
-  userRole: { fontSize: 12, color: "#ddd", marginTop: 2 },
-  userPhone: { fontSize: 12, color: "#ddd", marginTop: 2 },
-  editBtn: {
-    backgroundColor: "rgba(255,255,255,0.2)", // glassy white
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 6,
-    alignSelf: "flex-start",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.3)", // subtle border
-  },
-  editBtnText: {
-    color: "#fff", // keep text white for contrast
-    fontWeight: "600",
+  container: { 
+    flex: 1, 
+    backgroundColor: "#f8fafc" 
   },
 
-  statsRow: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginTop: 20,
-  },
-  statBox: { alignItems: "center" },
-  statValue: { fontSize: 18, fontWeight: "700", color: "#fff" },
-  statLabel: { fontSize: 12, color: "#ddd", marginTop: 4 },
-
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    marginHorizontal: 20,
-    marginTop: 20,
-    marginBottom: 10,
-    color: "#333",
-  },
-
-  quickActions: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginHorizontal: 16,
-  },
-  quickCard: {
-    flex: 1,
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 16,
-    marginHorizontal: 6,
+  // Gradient Header
+  gradientHeader: {
+    paddingTop: 60,
+    paddingBottom: 30,
+    paddingHorizontal: 20,
     alignItems: "center",
   },
-  quickTitle: {
+  profilePictureContainer: {
+    marginBottom: 16,
+  },
+  profilePicture: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  userName: { 
+    fontSize: 24, 
+    fontWeight: "700", 
+    color: "#fff",
+    marginBottom: 8,
+  },
+  followerCount: {
+    fontSize: 14,
+    color: "#fff",
+    marginBottom: 12,
+    opacity: 0.9,
+  },
+  ratingBadge: {
+    backgroundColor: "#fbbf24",
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+  ratingText: {
     fontSize: 14,
     fontWeight: "600",
-    marginTop: 8,
-    color: "#333",
+    color: "#000",
   },
-  quickSubtitle: { fontSize: 12, color: "#666", marginTop: 2 },
 
+  // Statistics Cards
+  statsContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 20,
+    marginTop: -20,
+    marginBottom: 20,
+  },
+  statCard: {
+    flex: 1,
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    marginHorizontal: 4,
+    paddingVertical: 16,
+    paddingHorizontal: 8,
+    borderRadius: 12,
+    alignItems: "center",
+    shadowColor: "#ffff",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  statValue: { 
+    fontSize: 20, 
+    fontWeight: "700", 
+    color: "#3902A1",
+    marginBottom: 4,
+  },
+  statLabel: { 
+    fontSize: 12, 
+    color: "#6b7280",
+    textAlign: "center",
+  },
+
+  // Rewards Section
+  rewardsCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F5F0FF",
+    marginHorizontal: 20,
+    marginBottom: 20,
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#3902A1",
+  },
+  rewardsIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#3902A1",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 12,
+  },
+  rewardsContent: {
+    flex: 1,
+  },
+  rewardsTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#3902A1",
+    marginBottom: 4,
+  },
+  rewardsSubtitle: {
+    fontSize: 14,
+    color: "#6b7280",
+  },
+
+  // Section Title
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 12,
+    color: "#000",
+  },
+
+  // Section Container
+  sectionContainer: {
+    backgroundColor: "#fff",
+    marginHorizontal: 20,
+    borderRadius: 12,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+
+  // List Items
   listItem: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
     padding: 16,
-    marginHorizontal: 16,
-    borderRadius: 12,
-    marginBottom: 10,
   },
-  listTextBox: { flex: 1, marginLeft: 12 },
-  listTitle: { fontSize: 15, fontWeight: "600", color: "#333" },
-  listSubtitle: { fontSize: 13, color: "#666" },
+  listTextBox: { 
+    flex: 1,
+  },
+  listTitle: { 
+    fontSize: 16, 
+    fontWeight: "500", 
+    color: "#000",
+  },
+  walletAmount: {
+    fontSize: 14,
+    color: "#dc2626",
+    marginTop: 2,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: "#e5e7eb",
+    marginLeft: 16,
+  },
 
+  // Logout Button
   logoutButton: {
-    // backgroundColor: "#ff4444",
-    margin: 16,
-    paddingVertical: 14,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    paddingVertical: 16,
     borderRadius: 12,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#DE3131",
+    borderColor: "#dc2626",
+    backgroundColor: "#fff",
   },
-  logoutButtonText: { color: "#DE3131", fontSize: 16, fontWeight: "600" },
+  logoutButtonText: { 
+    color: "#dc2626", 
+    fontSize: 16, 
+    fontWeight: "600" 
+  },
 
+  // Error States
   errorText: {
     fontSize: 16,
-    color: "#666",
+    color: "#6b7280",
     textAlign: "center",
     marginTop: 20,
   },
   loginButton: {
-    backgroundColor: "#000",
+    backgroundColor: "#3902A1",
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
     alignSelf: "center",
     marginTop: 20,
   },
-  loginButtonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
+  loginButtonText: { 
+    color: "#fff", 
+    fontSize: 16, 
+    fontWeight: "600" 
+  },
 });

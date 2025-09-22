@@ -77,12 +77,12 @@ const AddPost = () => {
 
   const handleBack = () => {
     // Navigation back logic
-    navigation.goBack();
+    navigation.navigate('MarketPlace' as never);
   };
 
   const handleClose = () => {
     // Close modal logic
-    navigation.goBack();
+    navigation.navigate('MarketPlace' as never);
   };
 
   const validateForm = () => {
@@ -254,7 +254,7 @@ const AddPost = () => {
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Add Section */}
-        <Text style={styles.sectionTitle}>Add</Text>
+        {/* <Text style={styles.sectionTitle}>Add</Text> */}
 
         {/* Tab Selection */}
         <View style={styles.tabContainer}>
