@@ -9,6 +9,7 @@ import {
   FlatList,
   StatusBar,
   SafeAreaView,
+  Modal,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
@@ -17,6 +18,10 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomHeader from '../components/CustomHeader';
 import { hexToRgba } from '../components/color';
+import MileageCalculator from '../components/MileageCalculator';
+import TollCalculator from '../components/TollCalculator';
+import TripAccounts from '../components/TripAccounts';
+import PrimePetrolBunks from '../components/PrimePetrolBunks';
 import {
   getLoadAvailabilities,
   getLoadAvailabilityById,
@@ -42,7 +47,7 @@ type ServiceCard = {
 
 type UtilityIcon = {
   id: string;
-  icon: string;
+  icon: React.ReactElement;
   label: string;
 };
 
@@ -127,6 +132,9 @@ const HomeScreen: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [loads, setLoads] = useState<LoadAvailabilityType[]>([]);
   const [marketplaceData, setMarketplaceData] = useState<MarketPlaceItem[]>([]);
+  const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
+  const [showUtilityPopup, setShowUtilityPopup] = useState<boolean>(false);
+  const [selectedUtility, setSelectedUtility] = useState<UtilityIcon | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -201,65 +209,100 @@ const HomeScreen: React.FC = () => {
 
   // Function to render load card
   const renderLoadCard = (item: MarketPlaceItem) => (
-    <View key={item.id} style={styles.postCard}>
-      <View style={styles.postHeader}>
-        <View style={styles.postHeaderLeft}>
-          <Icon name="package" size={16} color="#6B46C1" />
-          <Text style={styles.postTitle}>{item.loadTypeName}</Text>
+    <TouchableOpacity 
+      key={item.id} 
+      style={styles.newCard}
+      onPress={() => toggleCardDetails(item.id)}
+      activeOpacity={0.7}
+    >
+      <View style={styles.newCardHeader}>
+        <View style={styles.newCardHeaderLeft}>
+          <Text style={styles.newCardTitle}>Part-load required</Text>
+          <Text style={styles.newCardTime}>{getTimeAgo(item.createdAt)}</Text>
         </View>
-        <Text style={styles.postTime}>{getTimeAgo(item.createdAt)}</Text>
+        <View style={styles.newCardIcon}>
+          <Icon name="box" size={20} color="#F59E0B" />
+        </View>
       </View>
 
-      <View style={styles.postRoute}>
-        <Icon name="map-pin" size={14} color="#6B46C1" />
-        <Text style={styles.postRouteText}>
-          {item.pickupLocation} {'->'} {item.dropLocation}
+      <View style={styles.newCardRoute}>
+        <Icon name="map-pin" size={14} color="#dc2626" />
+        <Text style={styles.newCardRouteText}>
+          {item.pickupLocation} → {item.dropLocation}
         </Text>
       </View>
 
-      <View style={styles.postDetails}>
-        <View style={styles.postDetailItem}>
-          <Text style={styles.postDetailLabel}>PICKUP DATE</Text>
-          <Text style={styles.postDetailValue}>
+      <View style={styles.newCardDivider} />
+
+      <View style={styles.newCardDetails}>
+        <View style={styles.newCardDetailItem}>
+          <Text style={styles.newCardDetailLabel}>WHEN?</Text>
+          <Text style={styles.newCardDetailValue}>
             {formatDate(item.availableFrom)}
           </Text>
         </View>
-        <View style={styles.postDetailItem}>
-          <Text style={styles.postDetailLabel}>DELIVERY DATE</Text>
-          <Text style={styles.postDetailValue}>
-            {formatDate(item.availableTo)}
-          </Text>
+        <View style={styles.newCardDetailItem}>
+          <Text style={styles.newCardDetailLabel}>MATERIAL</Text>
+          <Text style={styles.newCardDetailValue}>Any</Text>
         </View>
-        <View style={styles.postDetailItem}>
-          <Text style={styles.postDetailLabel}>PRICE</Text>
-          <Text style={styles.postDetailValue}>
-            {item.price ? `₹${item.price}` : 'Contact'}
-          </Text>
+        <View style={styles.newCardDetailItem}>
+          <Text style={styles.newCardDetailLabel}>WEIGHT</Text>
+          <Text style={styles.newCardDetailValue}>2 Tons</Text>
         </View>
       </View>
 
-      <View style={styles.postFooter}>
-        <View style={styles.posterInfo}>
-          <Text style={styles.posterName}>User {item.userId}</Text>
-          <View style={styles.ratingContainer}>
-            {[...Array(5)].map((_, i) => (
-              <Icon key={i} name="star" size={12} color="#FFD700" />
-            ))}
+      {!expandedCards.has(item.id) && (
+        <TouchableOpacity 
+          style={styles.newDetailsButton}
+          onPress={() => toggleCardDetails(item.id)}
+        >
+          <Text style={styles.newDetailsButtonText}>Details</Text>
+        </TouchableOpacity>
+      )}
+
+      {expandedCards.has(item.id) && (
+        <View style={styles.postFooter}>
+          <View style={styles.posterInfo}>
+            <Text style={styles.posterName}>User {item.userId}</Text>
+            <View style={styles.ratingContainer}>
+              {[...Array(5)].map((_, i) => (
+                <Icon key={i} name="star" size={12} color="#FFD700" />
+              ))}
+            </View>
+          </View>
+          <View style={styles.actionButtons}>
+            <TouchableOpacity style={styles.actionButton}>
+              <Icon name="phone" size={16} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.actionButton, { backgroundColor: '#6B7280' }]}
+            >
+              <Icon name="message-circle" size={16} color="#fff" />
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.actionButtons}>
-          <TouchableOpacity style={styles.actionButton}>
-            <Icon name="phone" size={16} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.actionButton, { backgroundColor: '#6B7280' }]}
-          >
-            <Icon name="message-circle" size={16} color="#fff" />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
+      )}
+    </TouchableOpacity>
   );
+
+  // Function to toggle card details
+  const toggleCardDetails = (cardId: number) => {
+    setExpandedCards(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(cardId)) {
+        newSet.delete(cardId);
+      } else {
+        newSet.add(cardId);
+      }
+      return newSet;
+    });
+  };
+
+  // Function to handle utility icon click
+  const handleUtilityClick = (utility: UtilityIcon) => {
+    setSelectedUtility(utility);
+    setShowUtilityPopup(true);
+  };
 
   // Function to handle View More button click
   const handleViewMore = () => {
@@ -268,67 +311,85 @@ const HomeScreen: React.FC = () => {
 
   // Function to handle banner click - navigate to AddPost
   const handleBannerPress = () => {
-    navigation.navigate('MarketPlace' as never, { screen: 'AddPost' } as never);
+    navigation.navigate('MarketPlace' as never);
   };
 
   // Function to render truck card
   const renderTruckCard = (item: MarketPlaceItem) => (
-    <View key={item.id} style={styles.truckCard}>
-      <View style={styles.truckHeader}>
-        <View style={styles.truckHeaderLeft}>
-          <Icon name="truck" size={18} color="#10B981" />
-          <Text style={styles.truckTitle}>{item.loadTypeName}</Text>
+    <TouchableOpacity 
+      key={item.id} 
+      style={styles.newCard}
+      onPress={() => toggleCardDetails(item.id)}
+      activeOpacity={0.7}
+    >
+      <View style={styles.newCardHeader}>
+        <View style={styles.newCardHeaderLeft}>
+          <Text style={styles.newCardTitle}>Truck required</Text>
+          <Text style={styles.newCardTime}>{getTimeAgo(item.createdAt)}</Text>
         </View>
-        <Text style={styles.truckTime}>{getTimeAgo(item.createdAt)}</Text>
+        <View style={styles.truckCardIcon}>
+          <Icon name="truck" size={20} color="#10B981" />
+        </View>
       </View>
 
-      <View style={styles.truckRoute}>
-        <Icon name="map-pin" size={14} color="#10B981" />
-        <Text style={styles.truckRouteText}>{item.location}</Text>
+      <View style={styles.newCardRoute}>
+        <Icon name="map-pin" size={14} color="#dc2626" />
+        <Text style={styles.newCardRouteText}>
+          {item.pickupLocation} → {item.dropLocation}
+        </Text>
       </View>
 
-      <View style={styles.truckDetails}>
-        <View style={styles.truckDetailItem}>
-          <Text style={styles.truckDetailLabel}>AVAILABLE FROM</Text>
-          <Text style={styles.truckDetailValue}>
+      <View style={styles.newCardDivider} />
+
+      <View style={styles.newCardDetails}>
+        <View style={styles.newCardDetailItem}>
+          <Text style={styles.newCardDetailLabel}>WHEN?</Text>
+          <Text style={styles.newCardDetailValue}>
             {formatDate(item.availableFrom)}
           </Text>
         </View>
-        <View style={styles.truckDetailItem}>
-          <Text style={styles.truckDetailLabel}>AVAILABLE TO</Text>
-          <Text style={styles.truckDetailValue}>
-            {formatDate(item.availableTo)}
-          </Text>
+        <View style={styles.newCardDetailItem}>
+          <Text style={styles.newCardDetailLabel}>MATERIAL</Text>
+          <Text style={styles.newCardDetailValue}>Electronics</Text>
         </View>
-        <View style={styles.truckDetailItem}>
-          <Text style={styles.truckDetailLabel}>RATE</Text>
-          <Text style={styles.truckDetailValue}>
-            {item.price ? `₹${item.price}` : 'Contact'}
-          </Text>
+        <View style={styles.newCardDetailItem}>
+          <Text style={styles.newCardDetailLabel}>WEIGHT</Text>
+          <Text style={styles.newCardDetailValue}>15 Tons</Text>
         </View>
       </View>
 
-      <View style={styles.truckFooter}>
-        <View style={styles.truckOwnerInfo}>
-          <Text style={styles.truckOwnerName}>Owner {item.userId}</Text>
-          <View style={styles.truckRatingContainer}>
-            {[...Array(5)].map((_, i) => (
-              <Icon key={i} name="star" size={12} color="#FFD700" />
-            ))}
+      {!expandedCards.has(item.id) && (
+        <TouchableOpacity 
+          style={styles.newDetailsButton}
+          onPress={() => toggleCardDetails(item.id)}
+        >
+          <Text style={styles.newDetailsButtonText}>Details</Text>
+        </TouchableOpacity>
+      )}
+
+      {expandedCards.has(item.id) && (
+        <View style={styles.truckFooter}>
+          <View style={styles.truckOwnerInfo}>
+            <Text style={styles.truckOwnerName}>Owner {item.userId}</Text>
+            <View style={styles.truckRatingContainer}>
+              {[...Array(5)].map((_, i) => (
+                <Icon key={i} name="star" size={12} color="#FFD700" />
+              ))}
+            </View>
+          </View>
+          <View style={styles.truckActionButtons}>
+            <TouchableOpacity style={styles.truckActionButton}>
+              <Icon name="phone" size={16} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.truckActionButton, { backgroundColor: '#6B7280' }]}
+            >
+              <Icon name="message-circle" size={16} color="#fff" />
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.truckActionButtons}>
-          <TouchableOpacity style={styles.truckActionButton}>
-            <Icon name="phone" size={16} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.truckActionButton, { backgroundColor: '#6B7280' }]}
-          >
-            <Icon name="message-circle" size={16} color="#fff" />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
+      )}
+    </TouchableOpacity>
   );
 
   return (
@@ -392,7 +453,10 @@ const HomeScreen: React.FC = () => {
           <View style={styles.utilityIconsContainer}>
             {utilityIcons.map(utility => (
               <View key={utility.id} style={styles.utilityIcon}>
-                <TouchableOpacity style={styles.utilityIconCircle}>
+                <TouchableOpacity 
+                  style={styles.utilityIconCircle}
+                  onPress={() => handleUtilityClick(utility)}
+                >
                   {/* <Icon name={utility.icon} size={24} color="#6B46C1" /> */}
                   {utility.icon}
                 </TouchableOpacity>
@@ -462,6 +526,38 @@ const HomeScreen: React.FC = () => {
           </View>
         </ScrollView>
       </LinearGradient>
+
+      {/* Utility Popup Modal */}
+      <Modal
+        visible={showUtilityPopup}
+        transparent={false}
+        animationType="slide"
+        onRequestClose={() => setShowUtilityPopup(false)}
+      >
+        <View style={styles.fullScreenModal}>
+          {/* Modal Header */}
+          <View style={styles.modalHeader}>
+            <View style={styles.modalIconContainer}>
+              {selectedUtility?.icon}
+            </View>
+            <Text style={styles.modalTitle}>{selectedUtility?.label}</Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setShowUtilityPopup(false)}
+            >
+              <Icon name="x" size={24} color="#666" />
+            </TouchableOpacity>
+          </View>
+
+          {/* Modal Content - Render appropriate component */}
+          <View style={styles.modalContent}>
+            {selectedUtility?.id === '1' && <MileageCalculator />}
+            {selectedUtility?.id === '2' && <TollCalculator />}
+            {selectedUtility?.id === '3' && <TripAccounts />}
+            {selectedUtility?.id === '4' && <PrimePetrolBunks />}
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -887,5 +983,192 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#6B46C1',
     marginRight: 8,
+  },
+  // Details Button Styles
+  detailsButton: {
+    backgroundColor: '#F5F0FF',
+    borderWidth: 1,
+    borderColor: '#6B46C1',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  detailsButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#6B46C1',
+    marginRight: 8,
+  },
+  // New Card Styles
+  newCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  newCardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 12,
+  },
+  newCardHeaderLeft: {
+    flex: 1,
+  },
+  newCardTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#000',
+    marginBottom: 4,
+  },
+  newCardTime: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  newCardIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    backgroundColor: '#FFFBEB',
+    borderWidth: 1,
+    borderColor: '#F59E0B',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  newCardRoute: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  newCardRouteText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#000',
+    marginLeft: 6,
+  },
+  newCardDivider: {
+    height: 1,
+    backgroundColor: '#E5E7EB',
+    marginBottom: 12,
+  },
+  newCardDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  newCardDetailItem: {
+    flex: 1,
+  },
+  newCardDetailLabel: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginBottom: 4,
+    fontWeight: '500',
+  },
+  newCardDetailValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#000',
+  },
+  newDetailsButton: {
+    backgroundColor: '#FEF3C7',
+    borderRadius: 8,
+    paddingVertical: 2,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+  },
+  newDetailsButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#000',
+  },
+  // Load Card with Yellow Theme
+  // loadCard: {
+  //   backgroundColor: '#FFFBEB',
+  //   borderRadius: 12,
+  //   padding: 16,
+  //   marginBottom: 16,
+  //   borderWidth: 2,
+  //   borderColor: '#F59E0B',
+  //   shadowColor: '#000',
+  //   shadowOffset: { width: 0, height: 2 },
+  //   shadowOpacity: 0.1,
+  //   shadowRadius: 4,
+  //   elevation: 3,
+  // },
+  // // Truck Card with Green Theme
+  // truckCardNew: {
+  //   backgroundColor: '#F0FDF4',
+  //   borderRadius: 12,
+  //   padding: 16,
+  //   marginBottom: 16,
+  //   borderWidth: 2,
+  //   borderColor: '#10B981',
+  //   shadowColor: '#000',
+  //   shadowOffset: { width: 0, height: 2 },
+  //   shadowOpacity: 0.1,
+  //   shadowRadius: 4,
+  //   elevation: 3,
+  // },
+  // Truck Card Icon with Green Theme
+  truckCardIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    backgroundColor: '#DCFCE7',
+    borderWidth: 1,
+    borderColor: '#10B981',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  // Utility Popup Modal Styles
+  fullScreenModal: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#F8F9FA',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+  },
+  modalIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#F3F4F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  modalTitle: {
+    flex: 1,
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#000',
+  },
+  closeButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#F3F4F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    flex: 1,
   },
 });

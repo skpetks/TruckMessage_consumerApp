@@ -115,6 +115,7 @@ const MarketPlace: React.FC = () => {
   const [selectedTyreCount, setSelectedTyreCount] = useState<string>('16');
   const [selectedTonCapacity, setSelectedTonCapacity] = useState<string>('');
   const [selectedLoadWeight, setSelectedLoadWeight] = useState<string>('');
+  const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
   const navigation = useNavigation();
 
   const fetchMarketplaceData = async () => {
@@ -149,6 +150,19 @@ const MarketPlace: React.FC = () => {
       fetchMarketplaceData();
     }, []),
   );
+
+  // Function to toggle card details
+  const toggleCardDetails = (cardId: number) => {
+    setExpandedCards(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(cardId)) {
+        newSet.delete(cardId);
+      } else {
+        newSet.add(cardId);
+      }
+      return newSet;
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -274,97 +288,93 @@ const MarketPlace: React.FC = () => {
                 : new Date();
               const timeAgo = getTimeAgo(availableFrom);
 
-              // Determine icon and color based on loadTypeId
-              const getIconAndColor = (loadTypeId: number) => {
-                switch (loadTypeId) {
-                  case 1: // Load
-                    return { icon: 'package', color: '#2563eb' };
-                  case 2: // Truck
-                    return { icon: 'truck', color: '#22c55e' };
-                  default:
-                    return { icon: 'box', color: '#666' };
-                }
-              };
-
-              const { icon, color } = getIconAndColor(item.itemTypeID);
-
               return (
-                <View key={item.id} style={styles.card}>
-                  {/* Card Header with Icon and Title */}
-                  <View style={styles.cardHeader}>
-                    <View style={styles.cardIconContainer}>
-                      <Icon name={icon} size={20} color={color} />
-                    </View>
-                    <View style={styles.cardTitleContainer}>
-                      <Text style={styles.cardTitle}>
-                        {item.itemTypeID === 1 ? 'Part-load' : 'Driver'}
+                <TouchableOpacity 
+                  key={item.id} 
+                  style={styles.newCard}
+                  onPress={() => toggleCardDetails(item.id)}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.newCardHeader}>
+                    <View style={styles.newCardHeaderLeft}>
+                      <Text style={styles.newCardTitle}>
+                        {item.itemTypeID === 1 ? 'Part-load required' : 'Truck required'}
                       </Text>
-                      <Text style={styles.cardTimeAgo}>{timeAgo}</Text>
+                      <Text style={styles.newCardTime}>{timeAgo}</Text>
+                    </View>
+                    <View style={item.itemTypeID === 1 ? styles.newCardIcon : styles.truckCardIcon}>
+                      <Icon 
+                        name={item.itemTypeID === 1 ? "box" : "truck"} 
+                        size={20} 
+                        color={item.itemTypeID === 1 ? "#F59E0B" : "#10B981"} 
+                      />
                     </View>
                   </View>
 
-                  {/* Location */}
-                  <View style={styles.locationRow}>
+                  <View style={styles.newCardRoute}>
                     <Icon name="map-pin" size={14} color="#dc2626" />
-                    <Text style={styles.locationText}>
-                      {item.pickupLocation || 'N/A'} →{' '}
-                      {item.dropLocation || 'N/A'}
+                    <Text style={styles.newCardRouteText}>
+                      {item.pickupLocation || 'N/A'} → {item.dropLocation || 'N/A'}
                     </Text>
                   </View>
 
-                  {/* Details */}
-                  <View style={styles.detailsContainer}>
-                    <View style={styles.detailItem}>
-                      <Text style={styles.detailLabel}>WHEN?</Text>
-                      <Text style={styles.detailValue}>
+                  <View style={styles.newCardDivider} />
+
+                  <View style={styles.newCardDetails}>
+                    <View style={styles.newCardDetailItem}>
+                      <Text style={styles.newCardDetailLabel}>WHEN?</Text>
+                      <Text style={styles.newCardDetailValue}>
                         {formatDate(availableFrom)}
                       </Text>
                     </View>
-                    {item.itemTypeID === 1 ? (
-                      <>
-                        <View style={styles.detailItem}>
-                          <Text style={styles.detailLabel}>MATERIAL</Text>
-                          <Text style={styles.detailValue}>Any</Text>
-                        </View>
-                        <View style={styles.detailItem}>
-                          <Text style={styles.detailLabel}>WEIGHT</Text>
-                          <Text style={styles.detailValue}>2 Tons</Text>
-                        </View>
-                      </>
-                    ) : (
-                      <View style={styles.detailItem}>
-                        <Text style={styles.detailLabel}>TRUCK</Text>
-                        <Text style={styles.detailValue}>TATA Ace Pro EV</Text>
-                      </View>
-                    )}
+                    <View style={styles.newCardDetailItem}>
+                      <Text style={styles.newCardDetailLabel}>MATERIAL</Text>
+                      <Text style={styles.newCardDetailValue}>
+                        {item.itemTypeID === 1 ? 'Any' : 'Electronics'}
+                      </Text>
+                    </View>
+                    <View style={styles.newCardDetailItem}>
+                      <Text style={styles.newCardDetailLabel}>WEIGHT</Text>
+                      <Text style={styles.newCardDetailValue}>
+                        {item.itemTypeID === 1 ? '2 Tons' : '15 Tons'}
+                      </Text>
+                    </View>
                   </View>
 
-                  {/* Contact Information */}
-                  <View style={styles.contactRow}>
-                    <View style={styles.contactInfo}>
-                      <Text style={styles.contactName}>
-                        {item.itemTypeID === 1
-                          ? 'Muthu kumar'
-                          : 'Pandiarajan K'}
-                      </Text>
-                      <View style={styles.ratingContainer}>
-                        <Icon name="star" size={12} color="#fbbf24" />
-                        <Icon name="star" size={12} color="#fbbf24" />
-                        <Icon name="star" size={12} color="#fbbf24" />
-                        <Icon name="star" size={12} color="#fbbf24" />
-                        <Icon name="star" size={12} color="#fbbf24" />
+                  {!expandedCards.has(item.id) && (
+                    <TouchableOpacity 
+                      style={styles.newDetailsButton}
+                      onPress={() => toggleCardDetails(item.id)}
+                    >
+                      <Text style={styles.newDetailsButtonText}>Details</Text>
+                    </TouchableOpacity>
+                  )}
+
+                  {expandedCards.has(item.id) && (
+                    <View style={styles.postFooter}>
+                      <View style={styles.posterInfo}>
+                        <Text style={styles.posterName}>
+                          {item.itemTypeID === 1 ? `User ${item.userId}` : `Owner ${item.userId}`}
+                        </Text>
+                        <View style={styles.ratingContainer}>
+                          {[...Array(5)].map((_, i) => (
+                            <Icon key={i} name="star" size={12} color="#FFD700" />
+                          ))}
+                        </View>
+                      </View>
+                      <View style={styles.actionButtons}>
+                        <TouchableOpacity style={styles.actionButton}>
+                          <Icon name="phone" size={16} color="#fff" />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[styles.actionButton, { backgroundColor: '#6B7280' }]}
+                        >
+                          <Icon name="message-circle" size={16} color="#fff" />
+                        </TouchableOpacity>
                       </View>
                     </View>
-                    <View style={styles.actionButtons}>
-                      <TouchableOpacity style={styles.phoneButton}>
-                        <Icon name="phone" size={16} color="#fff" />
-                      </TouchableOpacity>
-                      <TouchableOpacity style={styles.messageButton}>
-                        <Icon name="message-circle" size={16} color="#fff" />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
+                  )}
+                </TouchableOpacity>
               );
             })}
 
@@ -1154,5 +1164,127 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
     fontWeight: '600',
+  },
+
+  // New Card Styles (matching Home page)
+  newCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  newCardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 12,
+  },
+  newCardHeaderLeft: {
+    flex: 1,
+  },
+  newCardTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#000',
+    marginBottom: 4,
+  },
+  newCardTime: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  newCardIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    backgroundColor: '#FFFBEB',
+    borderWidth: 1,
+    borderColor: '#F59E0B',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  truckCardIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    backgroundColor: '#DCFCE7',
+    borderWidth: 1,
+    borderColor: '#10B981',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  newCardRoute: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  newCardRouteText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#000',
+    marginLeft: 6,
+  },
+  newCardDivider: {
+    height: 1,
+    backgroundColor: '#E5E7EB',
+    marginBottom: 12,
+  },
+  newCardDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  newCardDetailItem: {
+    flex: 1,
+  },
+  newCardDetailLabel: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginBottom: 4,
+    fontWeight: '500',
+  },
+  newCardDetailValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#000',
+  },
+  newDetailsButton: {
+    backgroundColor: '#FEF3C7',
+    borderRadius: 8,
+    paddingVertical: 2,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+  },
+  newDetailsButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#000',
+  },
+  postFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  posterInfo: {
+    flex: 1,
+  },
+  posterName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1F2937',
+    marginBottom: 4,
+  },
+  actionButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#10B981',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
