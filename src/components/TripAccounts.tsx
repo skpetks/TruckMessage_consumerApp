@@ -63,12 +63,12 @@ const TripAccounts: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <View style={styles.iconContainer}>
           <Icon name="file-text" size={24} color="#6B46C1" />
         </View>
         <Text style={styles.title}>Trip Accounts</Text>
-      </View>
+      </View> */}
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <Text style={styles.description}>

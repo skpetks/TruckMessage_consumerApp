@@ -10,6 +10,7 @@ import {
   StatusBar,
   SafeAreaView,
   Modal,
+  Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
@@ -17,7 +18,8 @@ import MetrialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomHeader from '../components/CustomHeader';
-import { hexToRgba } from '../components/color';
+import color, { hexToRgba } from '../components/colors';
+import font from '../components/font';
 import MileageCalculator from '../components/MileageCalculator';
 import TollCalculator from '../components/TollCalculator';
 import TripAccounts from '../components/TripAccounts';
@@ -66,39 +68,39 @@ const serviceCards: ServiceCard[] = [
     id: '1',
     title: 'FASTag recharge',
     badge: '5 Low',
-    badgeColor: '#dc2626',
+    badgeColor: color.badgeDanger,
     buttonText: 'Recharge now >',
-    backgroundColor: '#ffffff',
+    backgroundColor: color.backgroundWhite,
   },
   {
     id: '2',
     title: 'Insurance renewal',
     badge: '2 Due',
-    badgeColor: '#dc2626',
+    badgeColor: color.badgeDanger,
     buttonText: 'Renew now >',
-    backgroundColor: '#ffffff',
+    backgroundColor: color.backgroundWhite,
   },
 ];
 
 const utilityIcons: UtilityIcon[] = [
   {
     id: '1',
-    icon: <MetrialIcons name="speed" size={24} color="#6B46C1" />,
+    icon: <MetrialIcons name="speed" size={24} color={color.iconPrimary} />,
     label: 'Mileage calculator',
   },
   {
     id: '2',
-    icon: <MetrialIcons name="toll" size={24} color="#6B46C1" />,
+    icon: <MetrialIcons name="toll" size={24} color={color.iconPrimary} />,
     label: 'Toll calculator',
   },
   {
     id: '3',
-    icon: <Icon name="file-text" size={24} color="#6B46C1" />,
+    icon: <Icon name="file-text" size={24} color={color.iconPrimary} />,
     label: 'Trip accounts',
   },
   {
     id: '4',
-    icon: <Icon name="droplet" size={24} color="#6B46C1" />,
+    icon: <Icon name="droplet" size={24} color={color.iconPrimary} />,
     label: 'Prime petrol bunks',
   },
 ];
@@ -221,12 +223,12 @@ const HomeScreen: React.FC = () => {
           <Text style={styles.newCardTime}>{getTimeAgo(item.createdAt)}</Text>
         </View>
         <View style={styles.newCardIcon}>
-          <Icon name="box" size={20} color="#F59E0B" />
+          <Icon name="box" size={20} color={color.iconWarning} />
         </View>
       </View>
 
       <View style={styles.newCardRoute}>
-        <Icon name="map-pin" size={14} color="#dc2626" />
+        <Icon name="map-pin" size={14} color={color.iconDanger} />
         <Text style={styles.newCardRouteText}>
           {item.pickupLocation} → {item.dropLocation}
         </Text>
@@ -266,18 +268,18 @@ const HomeScreen: React.FC = () => {
             <Text style={styles.posterName}>User {item.userId}</Text>
             <View style={styles.ratingContainer}>
               {[...Array(5)].map((_, i) => (
-                <Icon key={i} name="star" size={12} color="#FFD700" />
+                <Icon key={i} name="star" size={12} color={color.rating} />
               ))}
             </View>
           </View>
           <View style={styles.actionButtons}>
             <TouchableOpacity style={styles.actionButton}>
-              <Icon name="phone" size={16} color="#fff" />
+              <Icon name="phone" size={16} color={color.textLight} />
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.actionButton, { backgroundColor: '#6B7280' }]}
+              style={[styles.actionButton, { backgroundColor: color.buttonDisabled }]}
             >
-              <Icon name="message-circle" size={16} color="#fff" />
+              <Icon name="message-circle" size={16} color={color.textLight} />
             </TouchableOpacity>
           </View>
         </View>
@@ -328,12 +330,12 @@ const HomeScreen: React.FC = () => {
           <Text style={styles.newCardTime}>{getTimeAgo(item.createdAt)}</Text>
         </View>
         <View style={styles.truckCardIcon}>
-          <Icon name="truck" size={20} color="#10B981" />
+          <Icon name="truck" size={20} color={color.iconSuccess} />
         </View>
       </View>
 
       <View style={styles.newCardRoute}>
-        <Icon name="map-pin" size={14} color="#dc2626" />
+        <Icon name="map-pin" size={14} color={color.iconDanger} />
         <Text style={styles.newCardRouteText}>
           {item.pickupLocation} → {item.dropLocation}
         </Text>
@@ -373,18 +375,18 @@ const HomeScreen: React.FC = () => {
             <Text style={styles.truckOwnerName}>Owner {item.userId}</Text>
             <View style={styles.truckRatingContainer}>
               {[...Array(5)].map((_, i) => (
-                <Icon key={i} name="star" size={12} color="#FFD700" />
+                <Icon key={i} name="star" size={12} color={color.rating} />
               ))}
             </View>
           </View>
           <View style={styles.truckActionButtons}>
             <TouchableOpacity style={styles.truckActionButton}>
-              <Icon name="phone" size={16} color="#fff" />
+              <Icon name="phone" size={16} color={color.textLight} />
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.truckActionButton, { backgroundColor: '#6B7280' }]}
+              style={[styles.truckActionButton, { backgroundColor: color.buttonDisabled }]}
             >
-              <Icon name="message-circle" size={16} color="#fff" />
+              <Icon name="message-circle" size={16} color={color.textLight} />
             </TouchableOpacity>
           </View>
         </View>
@@ -394,9 +396,9 @@ const HomeScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#fff" />
+      <StatusBar barStyle="light-content" backgroundColor={color.backgroundWhite} />
       <LinearGradient
-        colors={['#6B46C1', '#FFBEA8', '#F3F4F6']}
+        colors={[color.primary, '#FFBEA8', color.backgroundLightGray]}
         locations={[0, 0.3, 0.5]}
         style={styles.gradientContainer}
       >
@@ -408,10 +410,10 @@ const HomeScreen: React.FC = () => {
           </View>
           <View style={styles.headerRight}>
             <View style={styles.walletContainer}>
-              <Icon name="credit-card" size={16} color="#fff" />
+              <Icon name="credit-card" size={16} color={color.textLight} />
               <Text style={styles.walletText}>0</Text>
             </View>
-            <Icon name="bell" size={20} color="#fff" style={styles.bellIcon} />
+            <Icon name="bell" size={20} color={color.textLight} style={styles.bellIcon} />
           </View>
         </View>
 
@@ -457,7 +459,7 @@ const HomeScreen: React.FC = () => {
                   style={styles.utilityIconCircle}
                   onPress={() => handleUtilityClick(utility)}
                 >
-                  {/* <Icon name={utility.icon} size={24} color="#6B46C1" /> */}
+                  {/* <Icon name={utility.icon} size={24} color={color.iconPrimary} /> */}
                   {utility.icon}
                 </TouchableOpacity>
                 <Text style={styles.utilityIconLabel}>{utility.label}</Text>
@@ -476,19 +478,19 @@ const HomeScreen: React.FC = () => {
                 onPress={handleBannerPress}
               >
                 <View style={[styles.bannerIcons,{right: 0, zIndex: 3}]}>
-                  <FontAwesome6 name="truck" size={20} color="#3902A1" />
+                  <FontAwesome6 name="truck" size={20} color={color.iconSecondary} />
                 </View>
                 <View style={[styles.bannerIcons,{right: 15, zIndex: 2}]}>
-                  <FontAwesome6 name="user-large" size={20} color="#3902A1" />
+                  <FontAwesome6 name="user-large" size={20} color={color.iconSecondary} />
                 </View>
                 <View style={[styles.bannerIcons,{right: 25, zIndex: 1}]}>
-                  <FontAwesome6 name="box" size={20} color="#3902A1" />
+                  <FontAwesome6 name="box" size={20} color={color.iconSecondary} />
                 </View>
 
                 <Text style={styles.bannerText}>
                   Need a truck, driver, or load? Post in seconds.
                 </Text>
-                <Icon name="arrow-right" size={20} color="#3902A1" />
+                <Icon name="arrow-right" size={20} color={color.iconSecondary} />
               </TouchableOpacity>
             </View>
 
@@ -514,7 +516,7 @@ const HomeScreen: React.FC = () => {
                     onPress={handleViewMore}
                   >
                     <Text style={styles.viewMoreText}>View More</Text>
-                    <Icon name="arrow-right" size={16} color="#6B46C1" />
+                    <Icon name="arrow-right" size={16} color={color.iconPrimary} />
                   </TouchableOpacity>
                 )}
               </>
@@ -525,39 +527,50 @@ const HomeScreen: React.FC = () => {
             )}
           </View>
         </ScrollView>
-      </LinearGradient>
 
-      {/* Utility Popup Modal */}
-      <Modal
-        visible={showUtilityPopup}
-        transparent={false}
-        animationType="slide"
-        onRequestClose={() => setShowUtilityPopup(false)}
-      >
-        <View style={styles.fullScreenModal}>
-          {/* Modal Header */}
-          <View style={styles.modalHeader}>
-            <View style={styles.modalIconContainer}>
-              {selectedUtility?.icon}
-            </View>
-            <Text style={styles.modalTitle}>{selectedUtility?.label}</Text>
-            <TouchableOpacity
-              style={styles.closeButton}
+        {/* Utility Action Sheet Modal */}
+        <Modal
+          visible={showUtilityPopup}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() => setShowUtilityPopup(false)}
+          statusBarTranslucent={true}
+        >
+          <View style={styles.actionSheetOverlay}>
+            <TouchableOpacity 
+              style={styles.actionSheetBackdrop}
+              activeOpacity={1}
               onPress={() => setShowUtilityPopup(false)}
-            >
-              <Icon name="x" size={24} color="#666" />
-            </TouchableOpacity>
-          </View>
+            />
+            <View style={styles.actionSheetContainer}>
+              {/* Action Sheet Header */}
+              <View style={styles.actionSheetHeader}>
+                <View style={styles.actionSheetHandle} />
+                <View style={styles.actionSheetTitleContainer}>
+                  <View style={styles.modalIconContainer}>
+                    {selectedUtility?.icon}
+                  </View>
+                  <Text style={styles.modalTitle}>{selectedUtility?.label}</Text>
+                  <TouchableOpacity
+                    style={styles.closeButton}
+                    onPress={() => setShowUtilityPopup(false)}
+                  >
+                    <Icon name="x" size={24} color={color.textLightGray} />
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-          {/* Modal Content - Render appropriate component */}
-          <View style={styles.modalContent}>
-            {selectedUtility?.id === '1' && <MileageCalculator />}
-            {selectedUtility?.id === '2' && <TollCalculator />}
-            {selectedUtility?.id === '3' && <TripAccounts />}
-            {selectedUtility?.id === '4' && <PrimePetrolBunks />}
+              {/* Action Sheet Content - Render appropriate component */}
+              <View style={styles.actionSheetContent}>
+                {selectedUtility?.id === '1' && <MileageCalculator />}
+                {selectedUtility?.id === '2' && <TollCalculator />}
+                {selectedUtility?.id === '3' && <TripAccounts />}
+                {selectedUtility?.id === '4' && <PrimePetrolBunks />}
+              </View>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      </LinearGradient>
     </SafeAreaView>
   );
 };
@@ -567,7 +580,15 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#6B46C1',
+    backgroundColor: color.containerBg,
+    ...Platform.select({
+      ios: {
+        paddingTop: 0,
+      },
+      android: {
+        paddingTop: 0,
+      },
+    }),
   },
   gradientContainer: {
     flex: 1,
@@ -584,9 +605,10 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   timeText: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: color.textLight,
   },
   headerRight: {
     flexDirection: 'row',
@@ -595,14 +617,15 @@ const styles = StyleSheet.create({
   walletContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: hexToRgba(color.textLight, 0.2),
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
     marginRight: 15,
   },
   walletText: {
-    color: '#fff',
+    fontFamily: font.fontFamily,
+    color: color.textLight,
     fontSize: 14,
     fontWeight: '600',
     marginLeft: 4,
@@ -614,14 +637,16 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   locationText: {
+    fontFamily: font.fontFamily,
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: hexToRgba(color.textLight, 0.8),
     marginBottom: 2,
   },
   locationName: {
+    fontFamily: font.fontFamily,
     fontSize: 18,
     fontWeight: '600',
-    color: '#fff',
+    color: color.textLight,
   },
   scrollContainer: {
     flex: 1,
@@ -637,7 +662,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 16,
     padding: 16,
-    shadowColor: '#000',
+    shadowColor: color.textDark,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -651,25 +676,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
+    fontFamily: font.fontFamily,
     fontSize: 12,
     fontWeight: '600',
-    color: '#fff',
+    color: color.textLight,
   },
   serviceCardTitle: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: color.textDark,
     marginBottom: 15,
   },
   serviceCardButton: {
-    backgroundColor: '#1E40AF',
+    backgroundColor: color.serviceCardBg,
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,
     alignSelf: 'flex-start',
   },
   serviceCardButtonText: {
-    color: '#fff',
+    fontFamily: font.fontFamily,
+    color: color.textLight,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -690,15 +718,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
-    shadowColor: '#fff',
+    shadowColor: color.backgroundWhite,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
   utilityIconLabel: {
+    fontFamily: font.fontFamily,
     fontSize: 11,
-    color: '#000',
+    color: color.textDark,
     textAlign: 'center',
     fontWeight: '500',
   },
@@ -706,15 +735,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   recentPostsTitle: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
     fontWeight: '700',
-    color: '#000',
+    color: color.textDark,
     marginBottom: 15,
   },
   purpleBanner: {
-    backgroundColor: '#F5F0FF',
+    backgroundColor: color.backgroundCard,
     borderWidth: 1,
-    borderColor: '#3902A1',
+    borderColor: color.primaryDark,
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
@@ -733,7 +763,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
-    shadowColor: '#000',
+    shadowColor: color.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -741,19 +771,19 @@ const styles = StyleSheet.create({
   },
   bannerText: {
     flex: 1,
-    color: '#3902A1',
+    color: color.primaryDark,
     fontSize: 14,
     fontWeight: '500',
     marginHorizontal: 12,
   },
   postCard: {
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
     // borderLeftWidth: 4,
-    // borderLeftColor: '#6B46C1',
-    shadowColor: '#000',
+    // borderLeftColor: color.primary,
+    shadowColor: color.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -771,13 +801,15 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   postTitle: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: color.textPrimary,
   },
   postTime: {
+    fontFamily: font.fontFamily,
     fontSize: 12,
-    color: '#6B7280',
+    color: color.textSecondary,
   },
   postRoute: {
     flexDirection: 'row',
@@ -785,16 +817,17 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   postRouteText: {
+    fontFamily: font.fontFamily,
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: color.textPrimary,
     marginLeft: 6,
   },
   postDetails: {
     marginBottom: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderColor: '#DEDEDE',
+    borderColor: color.borderLight,
     borderTopWidth: 0.5,
     borderBottomWidth: 0.5,
     paddingVertical: 5,
@@ -804,14 +837,16 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   postDetailLabel: {
+    fontFamily: font.fontFamily,
     fontSize: 12,
-    color: '#6B7280',
+    color: color.textSecondary,
     marginBottom: 2,
   },
   postDetailValue: {
+    fontFamily: font.fontFamily,
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: color.textPrimary,
   },
   postFooter: {
     flexDirection: 'row',
@@ -822,9 +857,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   posterName: {
+    fontFamily: font.fontFamily,
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: color.textPrimary,
     marginBottom: 4,
   },
   ratingContainer: {
@@ -838,24 +874,25 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#10B981',
+    backgroundColor: color.buttonSuccess,
     justifyContent: 'center',
     alignItems: 'center',
   },
   loadingContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
     marginBottom: 16,
   },
   loadingText: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
-    color: '#6B7280',
+    color: color.textSecondary,
     fontWeight: '500',
   },
   emptyContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
@@ -863,16 +900,16 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: color.textSecondary,
     fontWeight: '500',
   },
   // Truck Card Styles
   truckCard: {
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
-    shadowColor: '#000',
+    shadowColor: color.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -892,11 +929,11 @@ const styles = StyleSheet.create({
   truckTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: color.textPrimary,
   },
   truckTime: {
     fontSize: 12,
-    color: '#6B7280',
+    color: color.textSecondary,
   },
   truckRoute: {
     flexDirection: 'row',
@@ -906,14 +943,14 @@ const styles = StyleSheet.create({
   truckRouteText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: color.textPrimary,
     marginLeft: 6,
   },
   truckDetails: {
     marginBottom: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderColor: '#DEDEDE',
+    borderColor: color.borderLight,
     borderTopWidth: 0.5,
     borderBottomWidth: 0.5,
     paddingVertical: 5,
@@ -924,13 +961,13 @@ const styles = StyleSheet.create({
   },
   truckDetailLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: color.textSecondary,
     marginBottom: 2,
   },
   truckDetailValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: color.textPrimary,
   },
   truckFooter: {
     flexDirection: 'row',
@@ -943,7 +980,7 @@ const styles = StyleSheet.create({
   truckOwnerName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: color.textPrimary,
     marginBottom: 4,
   },
   truckRatingContainer: {
@@ -957,13 +994,13 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#10B981',
+    backgroundColor: color.buttonSuccess,
     justifyContent: 'center',
     alignItems: 'center',
   },
   // View More Button Styles
   viewMoreButton: {
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
@@ -971,8 +1008,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#6B46C1',
-    shadowColor: '#000',
+    borderColor: color.primary,
+    shadowColor: color.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -981,14 +1018,14 @@ const styles = StyleSheet.create({
   viewMoreText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B46C1',
+    color: color.primary,
     marginRight: 8,
   },
   // Details Button Styles
   detailsButton: {
-    backgroundColor: '#F5F0FF',
+    backgroundColor: color.backgroundCard,
     borderWidth: 1,
-    borderColor: '#6B46C1',
+    borderColor: color.primary,
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 16,
@@ -1000,16 +1037,16 @@ const styles = StyleSheet.create({
   detailsButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B46C1',
+    color: color.primary,
     marginRight: 8,
   },
   // New Card Styles
   newCard: {
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
-    shadowColor: '#000',
+    shadowColor: color.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -1027,20 +1064,20 @@ const styles = StyleSheet.create({
   newCardTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#000',
+    color: color.textDark,
     marginBottom: 4,
   },
   newCardTime: {
     fontSize: 12,
-    color: '#6B7280',
+    color: color.textSecondary,
   },
   newCardIcon: {
     width: 40,
     height: 40,
     borderRadius: 8,
-    backgroundColor: '#FFFBEB',
+    backgroundColor: color.backgroundCard,
     borderWidth: 1,
-    borderColor: '#F59E0B',
+    borderColor: color.warning,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -1052,12 +1089,12 @@ const styles = StyleSheet.create({
   newCardRouteText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000',
+    color: color.textDark,
     marginLeft: 6,
   },
   newCardDivider: {
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: color.border,
     marginBottom: 12,
   },
   newCardDetails: {
@@ -1070,17 +1107,17 @@ const styles = StyleSheet.create({
   },
   newCardDetailLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: color.textSecondary,
     marginBottom: 4,
     fontWeight: '500',
   },
   newCardDetailValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000',
+    color: color.textDark,
   },
   newDetailsButton: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: color.backgroundCard,
     borderRadius: 8,
     paddingVertical: 2,
     paddingHorizontal: 16,
@@ -1090,7 +1127,7 @@ const styles = StyleSheet.create({
   newDetailsButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000',
+    color: color.textDark,
   },
   // Load Card with Yellow Theme
   // loadCard: {
@@ -1125,31 +1162,70 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 8,
-    backgroundColor: '#DCFCE7',
+    backgroundColor: color.backgroundCard,
     borderWidth: 1,
-    borderColor: '#10B981',
+    borderColor: color.success,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
-  // Utility Popup Modal Styles
-  fullScreenModal: {
+  // Action Sheet Modal Styles
+  actionSheetOverlay: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+    paddingTop: Platform.OS === 'ios' ? 0 : 0,
   },
-  modalHeader: {
+  actionSheetBackdrop: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  actionSheetContainer: {
+    backgroundColor: color.backgroundWhite,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    maxHeight: '100%',
+    minHeight: '90%',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: -2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
+  },
+  actionSheetHeader: {
+    paddingTop: 12,
+    paddingBottom: 8,
+  },
+  actionSheetHandle: {
+    width: 40,
+    height: 4,
+    backgroundColor: color.border,
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginBottom: 16,
+  },
+  actionSheetTitleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#F8F9FA',
+    paddingHorizontal: 20,
+    paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: color.border,
   },
   modalIconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: color.backgroundLightGray,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -1158,17 +1234,19 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 20,
     fontWeight: '700',
-    color: '#000',
+    color: color.textDark,
   },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: color.backgroundLightGray,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  modalContent: {
+  actionSheetContent: {
     flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 20,
   },
 });

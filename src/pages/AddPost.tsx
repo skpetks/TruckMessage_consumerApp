@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Dropdown } from 'react-native-element-dropdown';
-import colors from '../components/color';
+import colors from '../components/colors';
 import { useNavigation } from '@react-navigation/native';
 import { saveLoadAvailability } from '../services/loadAvalibility';
 import { saveTripDetailLoad } from '../services/tripDetailLoad';

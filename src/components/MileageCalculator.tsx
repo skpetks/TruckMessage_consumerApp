@@ -44,12 +44,12 @@ const MileageCalculator: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.title}>Mileage calculator</Text>
-        {/* <TouchableOpacity style={styles.closeButton}>
+        <TouchableOpacity style={styles.closeButton}>
           <Icon name="x" size={20} color="#000" />
-        </TouchableOpacity> */}
-      </View>
+        </TouchableOpacity>
+      </View> */}
 
       <View style={styles.content}>
         {/* Information Banner */}

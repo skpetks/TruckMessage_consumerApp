@@ -17,7 +17,7 @@ import {
   selectIsAuthenticated,
 } from "../store/slice/user";
 import { useNavigation } from "@react-navigation/native";
-import { hexToRgba } from "../components/color";
+import { hexToRgba } from "../components/colors";
 
 const Profile = () => {
   const dispatch = useAppDispatch();
@@ -53,13 +53,16 @@ const Profile = () => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Gradient Header */}
-      <LinearGradient
-        colors={['#3802E8', '#B978C2','#FFB578']}
-        locations={[0, 0.5, 2]}
-        style={styles.gradientHeader}
-      >
+
+      <ScrollView showsVerticalScrollIndicator={false}>
+            <LinearGradient
+      colors={['#3802E8', '#B978C2','#FFB578']}
+      // start={{x: 0, y: 0}}
+      // end={{x: 1, y: 1}}
+      style={styles.container}
+    >
+        {/* Gradient Header */}
+        <View style={styles.gradientHeader}>
         {/* Profile Picture */}
         <View style={styles.profilePictureContainer}>
           <View style={styles.profilePicture}>
@@ -79,8 +82,10 @@ const Profile = () => {
         <View style={styles.ratingBadge}>
           <Text style={styles.ratingText}>4.5 stars</Text>
         </View>
-      </LinearGradient>
+        </View>
+        </LinearGradient>
 
+      <View style={styles.contentContainer} >
       {/* Statistics Cards */}
       <View style={styles.statsContainer}>
         <View style={styles.statCard}>
@@ -100,7 +105,7 @@ const Profile = () => {
           <Text style={styles.statLabel}>Orders</Text>
         </View>
       </View>
-
+      
       {/* Rewards Section */}
       <View style={styles.rewardsCard}>
         <View style={styles.rewardsIcon}>
@@ -154,11 +159,12 @@ const Profile = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Logout Button */}
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>Logout</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        {/* Logout Button */}
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutButtonText}>Logout</Text>
+        </TouchableOpacity>
+        </View>
+      </ScrollView>
   );
 };
 
@@ -166,10 +172,12 @@ export default Profile;
 
 const styles = StyleSheet.create({
   container: { 
-    flex: 1, 
-    backgroundColor: "#f8fafc" 
+    flex: 1,
   },
-
+  contentContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   // Gradient Header
   gradientHeader: {
     paddingTop: 60,
@@ -226,22 +234,22 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
     marginHorizontal: 4,
     paddingVertical: 16,
     paddingHorizontal: 8,
     borderRadius: 12,
     alignItems: "center",
-    shadowColor: "#ffff",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   statValue: { 
     fontSize: 20, 
     fontWeight: "700", 
-    color: "#3902A1",
+    color: "#8B5CF6",
     marginBottom: 4,
   },
   statLabel: { 
@@ -254,19 +262,24 @@ const styles = StyleSheet.create({
   rewardsCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F5F0FF",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
     marginHorizontal: 20,
     marginBottom: 20,
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#3902A1",
+    borderColor: "#8B5CF6",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   rewardsIcon: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#3902A1",
+    backgroundColor: "#8B5CF6",
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
@@ -277,7 +290,7 @@ const styles = StyleSheet.create({
   rewardsTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#3902A1",
+    color: "#8B5CF6",
     marginBottom: 4,
   },
   rewardsSubtitle: {
@@ -297,15 +310,15 @@ const styles = StyleSheet.create({
 
   // Section Container
   sectionContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
     marginHorizontal: 20,
     borderRadius: 12,
     marginBottom: 20,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
 
   // List Items
@@ -342,7 +355,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#dc2626",
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   logoutButtonText: { 
     color: "#dc2626", 

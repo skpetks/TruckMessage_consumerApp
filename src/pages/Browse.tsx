@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
-import { hexToRgba } from "../components/color";
+import color, { hexToRgba } from "../components/colors";
 import CustomHeader from "../components/CustomHeader";
 
 type Opportunity = {
@@ -190,21 +190,21 @@ const OpportunitiesScreen: React.FC = () => {
 export default OpportunitiesScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f9fafb", padding: 16 },
+  container: { flex: 1, backgroundColor: color.backgroundGray, padding: 16 },
 
   // Search Bar
   searchBar: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: color.backgroundWhite,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: color.border,
     marginBottom: 12,
   },
-  searchInput: { marginLeft: 8, flex: 1, fontSize: 14, color: "#000" },
+  searchInput: { marginLeft: 8, flex: 1, fontSize: 14, color: color.textDark },
 
   // Chips
   filters: { flexDirection: "row", flexWrap: "wrap", marginBottom: 12 },
@@ -212,24 +212,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: color.borderLight,
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,
     marginRight: 8,
     marginBottom: 8,
   },
-  chipActive: { backgroundColor: "#000" },
-  chipText: { fontSize: 13, color: "#333" },
-  chipTextActive: { color: "#fff", fontWeight: "600" },
+  chipActive: { backgroundColor: color.textDark },
+  chipText: { fontSize: 13, color: color.textPrimary },
+  chipTextActive: { color: color.textLight, fontWeight: "600" },
 
   // Cards
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: color.backgroundWhite,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
-    shadowColor: "#000",
+    shadowColor: color.shadow,
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
@@ -238,32 +238,32 @@ const styles = StyleSheet.create({
   cardHeader: { flexDirection: "row", justifyContent: "space-between" },
   badgeRow: { flexDirection: "row", gap: 6 },
   badgeGray: {
-    backgroundColor: "#f3f4f6",
+    backgroundColor: color.backgroundLightGray,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 8,
     fontSize: 12,
-    color: "#444",
+    color: color.textPrimary,
   },
   badgeUrgent: {
-    backgroundColor: "#fee2e2",
+    backgroundColor: color.backgroundCard,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 8,
     fontSize: 12,
-    color: "#dc2626",
+    color: color.badgeDanger,
     fontWeight: "600",
   },
-  rating: { fontSize: 14, color: "#444" },
+  rating: { fontSize: 14, color: color.textPrimary },
 
   // Title
   titleRow: { flexDirection: "row", alignItems: "center", marginVertical: 8 },
-  title: { fontSize: 14, fontWeight: "600", color: "#000", },
+  title: { fontSize: 14, fontWeight: "600", color: color.textDark, },
 
   // Details
   detailsRow: { flexDirection: "row", marginBottom: 8 },
   detailBox: {
-    backgroundColor: "#f9fafb",
+    backgroundColor: color.backgroundGray,
     padding: 8,
     borderRadius: 8,
     flex: 1,

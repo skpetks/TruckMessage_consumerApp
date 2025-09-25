@@ -9,6 +9,8 @@ import {
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import color from './colors';
+import font from './font';
 
 interface PetrolStation {
   id: string;
@@ -109,16 +111,16 @@ const PrimePetrolBunks: React.FC = () => {
     const hasHalfStar = rating % 1 !== 0;
 
     for (let i = 0; i < fullStars; i++) {
-      stars.push(<Icon key={i} name="star" size={12} color="#FFD700" />);
+      stars.push(<Icon key={i} name="star" size={12} color={color.rating} />);
     }
 
     if (hasHalfStar) {
-      stars.push(<Icon key="half" name="star" size={12} color="#FFD700" />);
+      stars.push(<Icon key="half" name="star" size={12} color={color.rating} />);
     }
 
     const emptyStars = 5 - Math.ceil(rating);
     for (let i = 0; i < emptyStars; i++) {
-      stars.push(<Icon key={`empty-${i}`} name="star" size={12} color="#E5E7EB" />);
+      stars.push(<Icon key={`empty-${i}`} name="star" size={12} color={color.border} />);
     }
 
     return stars;
@@ -126,12 +128,12 @@ const PrimePetrolBunks: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <View style={styles.iconContainer}>
-          <Icon name="droplet" size={24} color="#6B46C1" />
+          <Icon name="droplet" size={24} color={color.iconPrimary} />
         </View>
         <Text style={styles.title}>Prime Petrol Bunks</Text>
-      </View>
+      </View> */}
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <Text style={styles.description}>
@@ -145,7 +147,7 @@ const PrimePetrolBunks: React.FC = () => {
             value={currentLocation}
             onChangeText={setCurrentLocation}
             placeholder="Enter your current location"
-            placeholderTextColor="#999"
+            placeholderTextColor={color.textMuted}
           />
         </View>
 
@@ -204,11 +206,11 @@ const PrimePetrolBunks: React.FC = () => {
 
                 <View style={styles.stationDetails}>
                   <View style={styles.detailItem}>
-                    <Icon name="navigation" size={16} color="#6B7280" />
+                    <Icon name="navigation" size={16} color={color.textSecondary} />
                     <Text style={styles.detailText}>{station.distance} km away</Text>
                   </View>
                   <View style={styles.detailItem}>
-                    <Icon name="dollar-sign" size={16} color="#6B7280" />
+                    <Icon name="dollar-sign" size={16} color={color.textSecondary} />
                     <Text style={styles.detailText}>
                       ₹{getFuelTypePrice(station)} per liter
                     </Text>
@@ -227,7 +229,7 @@ const PrimePetrolBunks: React.FC = () => {
                 </View>
 
                 <TouchableOpacity style={styles.directionsButton}>
-                  <Icon name="navigation" size={16} color="#6B46C1" />
+                  <Icon name="navigation" size={16} color={color.iconPrimary} />
                   <Text style={styles.directionsButtonText}>Get Directions</Text>
                 </TouchableOpacity>
               </View>
@@ -256,37 +258,39 @@ export default PrimePetrolBunks;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: color.backgroundGray,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: color.border,
   },
   iconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: color.backgroundLightGray,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
   title: {
+    fontFamily: font.fontFamily,
     fontSize: 20,
     fontWeight: '700',
-    color: '#000',
+    color: color.textDark,
   },
   content: {
     flex: 1,
     padding: 20,
   },
   description: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
-    color: '#6B7280',
+    color: color.textSecondary,
     textAlign: 'center',
     marginBottom: 30,
     lineHeight: 24,
@@ -295,20 +299,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   label: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
     fontWeight: '600',
-    color: '#000',
+    color: color.textDark,
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: color.backgroundGray,
     borderWidth: 1,
     borderColor: '#E5E7EB',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
+    fontFamily: font.fontFamily,
     fontSize: 16,
-    color: '#000',
+    color: color.textDark,
   },
   fuelTypeContainer: {
     flexDirection: 'row',
@@ -321,7 +327,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#E5E7EB',
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     alignItems: 'center',
   },
   fuelTypeButtonActive: {
@@ -329,9 +335,10 @@ const styles = StyleSheet.create({
     borderColor: '#6B46C1',
   },
   fuelTypeText: {
+    fontFamily: font.fontFamily,
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: color.textSecondary,
   },
   fuelTypeTextActive: {
     color: '#fff',
@@ -352,6 +359,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#9CA3AF',
   },
   searchButtonText: {
+    fontFamily: font.fontFamily,
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
@@ -360,13 +368,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   resultsTitle: {
+    fontFamily: font.fontFamily,
     fontSize: 18,
     fontWeight: '700',
-    color: '#000',
+    color: color.textDark,
     marginBottom: 16,
   },
   stationCard: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: color.backgroundGray,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -383,14 +392,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   stationName: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
     fontWeight: '700',
-    color: '#000',
+    color: color.textDark,
     marginBottom: 4,
   },
   stationLocation: {
+    fontFamily: font.fontFamily,
     fontSize: 14,
-    color: '#6B7280',
+    color: color.textSecondary,
   },
   stationRating: {
     alignItems: 'center',
@@ -400,9 +411,10 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   ratingText: {
+    fontFamily: font.fontFamily,
     fontSize: 12,
     fontWeight: '600',
-    color: '#6B7280',
+    color: color.textSecondary,
   },
   stationDetails: {
     flexDirection: 'row',
@@ -415,8 +427,9 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   detailText: {
+    fontFamily: font.fontFamily,
     fontSize: 14,
-    color: '#6B7280',
+    color: color.textSecondary,
   },
   amenitiesContainer: {
     marginBottom: 12,
@@ -424,7 +437,7 @@ const styles = StyleSheet.create({
   amenitiesTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000',
+    color: color.textDark,
     marginBottom: 8,
   },
   amenitiesList: {
@@ -440,14 +453,14 @@ const styles = StyleSheet.create({
   },
   amenityText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: color.textSecondary,
     fontWeight: '500',
   },
   directionsButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: color.backgroundLightGray,
     paddingVertical: 8,
     borderRadius: 8,
     gap: 6,
@@ -458,14 +471,14 @@ const styles = StyleSheet.create({
     color: '#6B46C1',
   },
   resetButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: color.backgroundLightGray,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 20,
   },
   resetButtonText: {
-    color: '#6B7280',
+    color: color.textSecondary,
     fontSize: 16,
     fontWeight: '600',
   },

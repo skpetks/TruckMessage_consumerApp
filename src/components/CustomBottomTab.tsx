@@ -1,6 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import Icon from "react-native-vector-icons/Feather";
+import color, { hexToRgba } from "./colors";
+import font from "./font";
 
 const CustomBottomTab = ({ state, descriptors, navigation }: any) => {
   return (
@@ -43,12 +45,12 @@ const CustomBottomTab = ({ state, descriptors, navigation }: any) => {
             <Icon
               name={iconName}
               size={20}
-              color={isFocused ? "#1E40AF" : "#6B7280"}
+              color={isFocused ? color.tabActive : color.tabInactive}
             />
             <Text
               style={[
                 styles.tabItemText,
-                { color: isFocused ? "#1E40AF" : "#6B7280" },
+                { color: isFocused ? color.tabActive : color.tabInactive },
               ]}
             >
               {label}
@@ -65,16 +67,16 @@ export default CustomBottomTab;
 const styles = StyleSheet.create({
   tabBar: {
     flexDirection: "row",
-    backgroundColor: "#fff",
+    backgroundColor: color.tabBackground,
     borderTopWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: color.border,
     height: 70,
     paddingHorizontal: 16,
     paddingTop: 8,
     paddingBottom: 8,
     justifyContent: "space-around",
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: color.shadow,
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -90,9 +92,10 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   tabItemActive: {
-    backgroundColor: "rgba(30, 64, 175, 0.1)",
+    backgroundColor: hexToRgba(color.tabActive, 0.1),
   },
   tabItemText: {
+    fontFamily: font.fontFamily,
     fontSize: 12,
     fontWeight: "500",
   },

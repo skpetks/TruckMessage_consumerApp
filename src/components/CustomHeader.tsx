@@ -1,6 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
+import color from "./colors";
+import font from "./font";
 
 interface Props {
   userName: string;
@@ -20,7 +22,7 @@ const CustomHeader: React.FC<Props> = ({
       {/* Left: Logo + Text */}
       <View style={styles.leftSection}>
         <View style={styles.logoContainer}>
-          <Icon name="truck" size={20} color="#fff" />
+          <Icon name="truck" size={20} color={color.textLight} />
         </View>
         <View>
           <Text style={styles.title}>Truck Message</Text>
@@ -31,14 +33,14 @@ const CustomHeader: React.FC<Props> = ({
       {/* Right: Notification + Location */}
       <View style={styles.rightSection}>
         <TouchableOpacity onPress={onNotificationPress} style={styles.iconBtn}>
-          <Icon name="bell" size={20} color="#000" />
+          <Icon name="bell" size={20} color={color.textDark} />
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={onLocationPress}
           style={styles.locationContainer}
         >
-          <Icon name="map-pin" size={16} color="#000" />
+          <Icon name="map-pin" size={16} color={color.textDark} />
           <Text style={styles.locationText}>{location}</Text>
         </TouchableOpacity>
       </View>
@@ -53,30 +55,32 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#fff",
+    backgroundColor: color.backgroundWhite,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderColor: "#eee",
+    borderColor: color.borderLight,
   },
   leftSection: {
     flexDirection: "row",
     alignItems: "center",
   },
   logoContainer: {
-    backgroundColor: "#000",
+    backgroundColor: color.textDark,
     padding: 10,
     borderRadius: 12,
     marginRight: 10,
   },
   title: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
     fontWeight: "700",
-    color: "#000",
+    color: color.textDark,
   },
   subtitle: {
+    fontFamily: font.fontFamily,
     fontSize: 13,
-    color: "#666",
+    color: color.textLightGray,
   },
   rightSection: {
     flexDirection: "row",
@@ -89,15 +93,16 @@ const styles = StyleSheet.create({
   locationContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: color.backgroundLightGray,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 20,
   },
   locationText: {
     marginLeft: 5,
+    fontFamily: font.fontFamily,
     fontSize: 13,
-    color: "#000",
+    color: color.textDark,
     fontWeight: "500",
   },
 });

@@ -24,6 +24,9 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>UIAppFonts</key>
 <array>
+  <string>Manrope-Regular.ttf</string>
+  <string>Manrope-Medium.ttf</string>
+  <string>Manrope-Bold.ttf</string>
   <string>AntDesign.ttf</string>
   <string>Entypo.ttf</string>
   <string>EvilIcons.ttf</string>

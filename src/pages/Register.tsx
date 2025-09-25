@@ -14,7 +14,8 @@ import {
 import { registerUser } from "../services/register";
 import { useNavigation } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/Feather';
-import color from "../components/color";
+import color from "../components/colors";
+import font from "../components/font";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Dropdown } from 'react-native-element-dropdown';
 import { fetchStates } from "../services/states";
@@ -144,7 +145,7 @@ export default function RegisterScreen() {
         <View style={styles.header}>
           <View style={styles.logoContainer}>
             <View style={styles.logo}>
-              <Icon name="truck" size={30} color="#fff" />
+              <Icon name="truck" size={30} color={color.textLight} />
             </View>
             <Text style={styles.brandName}>Join Truck Message</Text>
             <Text style={styles.tagline}>Connect with India's logistics network</Text>
@@ -171,7 +172,7 @@ export default function RegisterScreen() {
                   <Icon 
                     name={type.icon as any} 
                     size={20} 
-                    color={type.selected ? "#000" : "#6B7280"} 
+                    color={type.selected ? color.textDark : color.textSecondary} 
                   />
                   <View style={styles.userTypeText}>
                     <Text style={[
@@ -203,7 +204,7 @@ export default function RegisterScreen() {
               <TextInput
                 style={styles.input}
                 placeholder="Enter your full name"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={color.textMuted}
                 value={`${form.firstName} ${form.lastName}`.trim()}
                 onChangeText={(text) => {
                   const names = text.split(' ');
@@ -217,11 +218,11 @@ export default function RegisterScreen() {
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Username</Text>
               <View style={styles.inputWrapper}>
-                <Icon name="user" size={18} color="#6B7280" style={styles.inputIcon} />
+                <Icon name="user" size={18} color={color.textSecondary} style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Choose a username"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={color.textMuted}
                   value={form.userName}
                   onChangeText={(text) => handleChange("userName", text)}
                   autoCapitalize="none"
@@ -232,11 +233,11 @@ export default function RegisterScreen() {
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>User Code</Text>
               <View style={styles.inputWrapper}>
-                <Icon name="hash" size={18} color="#6B7280" style={styles.inputIcon} />
+                <Icon name="hash" size={18} color={color.textSecondary} style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Enter user code"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={color.textMuted}
                   value={form.userCode}
                   onChangeText={(text) => handleChange("userCode", text)}
                 />
@@ -246,11 +247,11 @@ export default function RegisterScreen() {
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Phone Number</Text>
               <View style={styles.inputWrapper}>
-                <Icon name="phone" size={18} color="#6B7280" style={styles.inputIcon} />
+                <Icon name="phone" size={18} color={color.textSecondary} style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Enter phone number"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={color.textMuted}
                   maxLength={10}
                   value={form.mobileNumber}
                   onChangeText={(text) => handleChange("mobileNumber", text)}
@@ -262,11 +263,11 @@ export default function RegisterScreen() {
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Email (Optional)</Text>
               <View style={styles.inputWrapper}>
-                <Icon name="mail" size={18} color="#6B7280" style={styles.inputIcon} />
+                <Icon name="mail" size={18} color={color.textSecondary} style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Enter email address"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={color.textMuted}
                   value={form.email}
                   onChangeText={(text) => handleChange("email", text)}
                   keyboardType="email-address"
@@ -281,11 +282,11 @@ export default function RegisterScreen() {
                 <TextInput
                   style={styles.input}
                   placeholder="Select your city"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={color.textMuted}
                   value={form.city}
                   onChangeText={(text) => handleChange("city", text)}
                 />
-                <Icon name="chevron-down" size={18} color="#6B7280" style={styles.inputIconRight} />
+                <Icon name="chevron-down" size={18} color={color.textSecondary} style={styles.inputIconRight} />
               </View>
             </View>
 
@@ -294,7 +295,7 @@ export default function RegisterScreen() {
               <View style={styles.inputWrapper}>
                 {statesLoading ? (
                   <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="small" color="#6B7280" />
+                    <ActivityIndicator size="small" color={color.textSecondary} />
                     <Text style={styles.loadingText}>Loading states...</Text>
                   </View>
                 ) : (
@@ -319,7 +320,7 @@ export default function RegisterScreen() {
                       <Icon 
                         name="map-pin" 
                         size={20} 
-                        color="#6B7280" 
+                        color={color.textSecondary} 
                         style={styles.inputIcon} 
                       />
                     )}
@@ -331,11 +332,11 @@ export default function RegisterScreen() {
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Pincode</Text>
               <View style={styles.inputWrapper}>
-                <Icon name="map-pin" size={18} color="#6B7280" style={styles.inputIcon} />
+                <Icon name="map-pin" size={18} color={color.textSecondary} style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Enter pincode"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={color.textMuted}
                   value={form.pincode}
                   onChangeText={(text) => handleChange("pincode", text)}
                   keyboardType="numeric"
@@ -347,11 +348,11 @@ export default function RegisterScreen() {
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Address</Text>
               <View style={styles.inputWrapper}>
-                <Icon name="home" size={18} color="#6B7280" style={styles.inputIcon} />
+                <Icon name="home" size={18} color={color.textSecondary} style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Enter your address"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={color.textMuted}
                   value={form.address}
                   onChangeText={(text) => handleChange("address", text)}
                   multiline
@@ -420,7 +421,7 @@ export default function RegisterScreen() {
                 <TextInput
                   style={styles.input}
                   placeholder="Enter Aadhar number"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={color.textMuted}
                   value={form.adharCardNumber}
                   onChangeText={(text) => handleChange("adharCardNumber", text)}
                   keyboardType="numeric"
@@ -436,7 +437,7 @@ export default function RegisterScreen() {
                 <TextInput
                   style={styles.input}
                   placeholder="Enter photo URL"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={color.textMuted}
                   value={form.photo}
                   onChangeText={(text) => handleChange("photo", text)}
                   autoCapitalize="none"
@@ -450,7 +451,7 @@ export default function RegisterScreen() {
                 <TextInput
                   style={styles.input}
                   placeholder="Create a password"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={color.textMuted}
                   value={form.password}
                   onChangeText={(text) => handleChange("password", text)}
                   secureTextEntry={!showPassword}
@@ -533,6 +534,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   brandName: {
+    fontFamily: font.fontFamily,
     fontSize: 22,
     fontWeight: "700",
     color: "#000",
@@ -540,6 +542,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   tagline: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
     color: "#6B7280",
     textAlign: "center",
@@ -566,6 +569,7 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   sectionLabel: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
     fontWeight: "600",
     color: "#111827",
@@ -709,6 +713,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   signInText: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
     color: "#111827",
     marginBottom: 16,

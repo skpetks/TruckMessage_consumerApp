@@ -8,6 +8,8 @@ import {
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import color from './colors';
+import font from './font';
 
 const TollCalculator: React.FC = () => {
   const [fromLocation, setFromLocation] = useState<string>('');
@@ -70,12 +72,12 @@ const TollCalculator: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.title}>Toll calculator</Text>
-        {/* <TouchableOpacity style={styles.closeButton}>
+        <TouchableOpacity style={styles.closeButton}>
           <Icon name="x" size={20} color="#000" />
-        </TouchableOpacity> */}
-      </View>
+        </TouchableOpacity>
+      </View> */}
 
       <View style={styles.content}>
         {/* Information Banner */}
@@ -257,7 +259,7 @@ export default TollCalculator;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
   },
   header: {
     flexDirection: 'row',
@@ -265,18 +267,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 16,
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
   },
   title: {
+    fontFamily: font.fontFamily,
     fontSize: 18,
     fontWeight: '700',
-    color: '#000',
+    color: color.textDark,
   },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: color.backgroundLightGray,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -288,15 +291,16 @@ const styles = StyleSheet.create({
   infoBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#EFF6FF',
+    backgroundColor: color.backgroundCard,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
     marginBottom: 24,
   },
   infoText: {
+    fontFamily: font.fontFamily,
     fontSize: 14,
-    color: '#2563EB',
+    color: color.secondaryLight,
     marginLeft: 8,
     fontWeight: '500',
   },
@@ -304,20 +308,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   label: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
     fontWeight: '600',
-    color: '#000',
+    color: color.textDark,
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     borderWidth: 1,
-    borderColor: '#D1D5DB',
+    borderColor: color.borderGray,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,
+    fontFamily: font.fontFamily,
     fontSize: 16,
-    color: '#000',
+    color: color.textDark,
   },
   buttonRow: {
     flexDirection: 'row',
@@ -330,26 +336,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#8B5CF6',
-    backgroundColor: '#fff',
+    borderColor: color.primaryLight,
+    backgroundColor: color.backgroundWhite,
     alignItems: 'center',
   },
   selectionButtonActive: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#fff',
+    borderColor: color.primaryLight,
+    backgroundColor: color.backgroundWhite,
   },
   selectionButtonText: {
+    fontFamily: font.fontFamily,
     fontSize: 12,
     fontWeight: '500',
-    color: '#8B5CF6',
+    color: color.primaryLight,
     textAlign: 'center',
   },
   selectionButtonTextActive: {
-    color: '#8B5CF6',
+    color: color.primaryLight,
     fontWeight: '600',
   },
   calculateButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: color.primaryLight,
     paddingVertical: 16,
     borderRadius: 8,
     alignItems: 'center',
@@ -357,6 +364,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   calculateButtonText: {
+    fontFamily: font.fontFamily,
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
@@ -371,12 +379,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   resultLabel: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
     color: '#059669',
     marginBottom: 8,
     fontWeight: '500',
   },
   resultValue: {
+    fontFamily: font.fontFamily,
     fontSize: 20,
     fontWeight: '700',
     color: '#10B981',

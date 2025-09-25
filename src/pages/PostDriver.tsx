@@ -14,7 +14,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/Feather';
-import color from '../components/color';
+import color from '../components/colors';
 import { saveDriverAvailability } from '../services/driverAvailability';
 import { DriverAvailabilityType } from '../types/DriverAvailability';
 

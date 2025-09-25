@@ -21,7 +21,8 @@ import { useNavigation } from "@react-navigation/native";
 import { checkMobile, loginWithOtp, sendOtp } from "../services/login";
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import color from "../components/color";
+import color from "../components/colors";
+import font from "../components/font";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setUser, setLoading, setError, clearError } from "../store/slice/user";
 
@@ -155,7 +156,7 @@ export default function Login() {
       <View style={styles.header}>
         <View style={styles.logoContainer}>
           <View style={styles.logo}>
-            <Feather name="truck" size={30} color="#fff" />
+            <Feather name="truck" size={30} color={color.textLight} />
           </View>
           <Text style={styles.brandName}>Truck Message</Text>
           <Text style={styles.tagline}>Your Complete Logistics Partner</Text>
@@ -176,7 +177,7 @@ export default function Login() {
                 <TextInput
                   style={styles.input}
                   placeholder="Enter phone number or email"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={color.textMuted}
                   keyboardType="phone-pad"
                   value={phone}
                   onChangeText={setPhone}
@@ -190,7 +191,7 @@ export default function Login() {
               disabled={isLoading}
             >
               <Text style={styles.signInButtonText}>Sign In</Text>
-              <FontAwesome6 name="arrow-right" size={14} color="#fff"/>
+              <FontAwesome6 name="arrow-right" size={14} color={color.textLight}/>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.forgotPassword}>
@@ -235,7 +236,7 @@ export default function Login() {
             
             <TouchableOpacity style={styles.signInButton} onPress={verifyOtp}>
               <Text style={styles.signInButtonText}>Verify OTP</Text>
-              <FontAwesome6 name="arrow-right" size={14} color="#fff"/>
+              <FontAwesome6 name="arrow-right" size={14} color={color.textLight}/>
             </TouchableOpacity>
           </>
         )}
@@ -267,48 +268,53 @@ const styles = StyleSheet.create({
   logo: {
     width: 60,
     height: 60,
-    backgroundColor: "#000",
+    backgroundColor: color.textDark,
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 16,
   },
   logoText: {
+    fontFamily: font.fontFamily,
     fontSize: 32,
   },
   brandName: {
+    fontFamily: font.fontFamily,
     fontSize: 28,
     fontWeight: "700",
-    color: "#000",
+    color: color.textDark,
     marginBottom: 8,
   },
   tagline: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
-    color: "#6B7280",
+    color: color.textSecondary,
     textAlign: "center",
   },
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: color.backgroundWhite,
     width: "100%",
     borderRadius: 24,
     padding: 32,
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: color.shadow,
     shadowOpacity: 0.08,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 16,
     elevation: 8,
   },
   title: {
+    fontFamily: font.fontFamily,
     fontSize: 20,
     fontWeight: "700",
-    color: "#111827",
+    color: color.textPrimary,
     marginBottom: 8,
     textAlign: "center",
   },
   subtitle: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
-    color: "#6B7280",
+    color: color.textSecondary,
     marginBottom: 32,
     textAlign: "center",
   },
@@ -317,9 +323,10 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   inputLabel: {
+    fontFamily: font.fontFamily,
     fontSize: 12,
     fontWeight: "500",
-    color: "#374151",
+    color: color.textGray,
     marginBottom: 8,
     textAlign: "left",
     alignSelf: "flex-start",
@@ -328,26 +335,28 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#F9FAFB",
+    backgroundColor: color.inputBackground,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: color.inputBorder,
     borderRadius: 10,
     paddingHorizontal: 16,
     paddingVertical: 1,
   },
   inputIcon: {
+    fontFamily: font.fontFamily,
     fontSize: 16,
     marginRight: 12,
-    color: "#6B7280",
+    color: color.textSecondary,
   },
   input: {
     flex: 1,
     height: 38,
+    fontFamily: font.fontFamily,
     fontSize: 12,
-    color: "#111827",
+    color: color.textPrimary,
   },
   signInButton: {
-    backgroundColor: "#000",
+    backgroundColor: color.textDark,
     paddingVertical: 8,
     paddingHorizontal: 24,
     borderRadius: 12,
@@ -358,15 +367,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   buttonDisabled: {
-    backgroundColor: "#9CA3AF",
+    backgroundColor: color.buttonDisabled,
   },
   signInButtonText: {
+    fontFamily: font.fontFamily,
     color: "#fff",
     fontSize: 14,
     fontWeight: "600",
     marginRight: 8,
   },
   arrowIcon: {
+    fontFamily: font.fontFamily,
     color: "#fff",
     fontSize: 18,
     fontWeight: "600",
@@ -376,26 +387,28 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   forgotPasswordText: {
-    color: "#6B7280",
+    fontFamily: font.fontFamily,
+    color: color.textSecondary,
     fontSize: 14,
     fontWeight: "500",
   },
   separator: {
     width: "100%",
     height: 1,
-    backgroundColor: "#E5E7EB",
+    backgroundColor: color.border,
     marginBottom: 24,
   },
   createAccountText: {
+    fontFamily: font.fontFamily,
     fontSize: 14,
-    color: "#6B7280",
+    color: color.textSecondary,
     marginBottom: 16,
     textAlign: "center",
   },
   createAccountButton: {
-    backgroundColor: "#fff",
+    backgroundColor: color.backgroundWhite,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: color.inputBorder,
     paddingVertical: 8,
     paddingHorizontal: 24,
     borderRadius: 12,
@@ -403,7 +416,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   createAccountButtonText: {
-    color: "#111827",
+    fontFamily: font.fontFamily,
+    color: color.textPrimary,
     fontSize: 14,
     fontWeight: "600",
   },
@@ -419,17 +433,18 @@ const styles = StyleSheet.create({
     lineHeight: 56,
     fontSize: 20,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: color.inputBorder,
     textAlign: "center",
     borderRadius: 12,
-    backgroundColor: "#F9FAFB",
-    color: "#111827",
+    backgroundColor: color.inputBackground,
+    color: color.textPrimary,
   },
   focusCell: {
-    borderColor: "#000",
-    backgroundColor: "#fff",
+    borderColor: color.textDark,
+    backgroundColor: color.backgroundWhite,
   },
   footerText: {
+    fontFamily: font.fontFamily,
     fontSize: 12,
     color: "#9CA3AF",
     textAlign: "center",
@@ -439,8 +454,9 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   otpLabel: {
+    fontFamily: font.fontFamily,
     fontSize: 12,
-    color: "#374151",
+    color: color.textGray,
     marginBottom: 8,
     textAlign: "left",
     alignSelf: "flex-start",

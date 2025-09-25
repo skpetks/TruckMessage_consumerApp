@@ -11,7 +11,7 @@ import {
   Modal,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import { hexToRgba } from '../components/color';
+import color, { hexToRgba } from '../components/colors';
 import { getMarketPlaceList } from '../services/marketplace';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { MarketPlaceItem } from '../types/MarketPlace';
@@ -167,7 +167,7 @@ const MarketPlace: React.FC = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#3902A1', '#3902A1']}
+        colors={[color.primaryDark, color.primaryDark]}
         locations={[0, 0.5]}
         style={styles.gradientContainer}
       >
@@ -188,7 +188,7 @@ const MarketPlace: React.FC = () => {
             <Icon
               name="list"
               size={16}
-              color={selectedTab === 'needs' ? '#fff' : '#8B5CF6'}
+              color={selectedTab === 'needs' ? color.textLight : color.primaryLight}
             />
             <Text
               style={[
@@ -210,7 +210,7 @@ const MarketPlace: React.FC = () => {
             <Icon
               name="tag"
               size={16}
-              color={selectedTab === 'buysell' ? '#fff' : '#8B5CF6'}
+              color={selectedTab === 'buysell' ? color.textLight : color.primaryLight}
             />
             <Text
               style={[
@@ -230,11 +230,11 @@ const MarketPlace: React.FC = () => {
           {/* Search Bar */}
           <View style={styles.searchContainer}>
             <View style={styles.searchBar}>
-              <Icon name="search" size={18} color="#666" />
+              <Icon name="search" size={18} color={color.textLightGray} />
               <TextInput
                 placeholder="Search"
                 style={styles.searchInput}
-                placeholderTextColor="#888"
+                placeholderTextColor={color.textMuted}
                 value={searchKeyword}
                 onChangeText={setSearchKeyword}
               />
@@ -243,7 +243,7 @@ const MarketPlace: React.FC = () => {
               style={styles.filterButton}
               onPress={() => setShowFilterPopup(true)}
             >
-              <Icon name="sliders" size={18} color="#8B5CF6" />
+              <Icon name="sliders" size={18} color={color.primaryLight} />
             </TouchableOpacity>
           </View>
 
@@ -251,7 +251,7 @@ const MarketPlace: React.FC = () => {
           {/* Loading State */}
           {loading && (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#2563eb" />
+              <ActivityIndicator size="large" color={color.secondaryLight} />
               <Text style={styles.loadingText}>Loading opportunities...</Text>
             </View>
           )}
@@ -259,7 +259,7 @@ const MarketPlace: React.FC = () => {
           {/* Error State */}
           {error && (
             <View style={styles.errorContainer}>
-              <Icon name="alert-circle" size={24} color="#dc2626" />
+              <Icon name="alert-circle" size={24} color={color.iconDanger} />
               <Text style={styles.errorText}>{error}</Text>
               <TouchableOpacity
                 style={styles.retryButton}
@@ -306,13 +306,13 @@ const MarketPlace: React.FC = () => {
                       <Icon 
                         name={item.itemTypeID === 1 ? "box" : "truck"} 
                         size={20} 
-                        color={item.itemTypeID === 1 ? "#F59E0B" : "#10B981"} 
+                        color={item.itemTypeID === 1 ? color.iconWarning : color.iconSuccess} 
                       />
                     </View>
                   </View>
 
                   <View style={styles.newCardRoute}>
-                    <Icon name="map-pin" size={14} color="#dc2626" />
+                    <Icon name="map-pin" size={14} color={color.iconDanger} />
                     <Text style={styles.newCardRouteText}>
                       {item.pickupLocation || 'N/A'} → {item.dropLocation || 'N/A'}
                     </Text>
@@ -358,18 +358,18 @@ const MarketPlace: React.FC = () => {
                         </Text>
                         <View style={styles.ratingContainer}>
                           {[...Array(5)].map((_, i) => (
-                            <Icon key={i} name="star" size={12} color="#FFD700" />
+                            <Icon key={i} name="star" size={12} color={color.rating} />
                           ))}
                         </View>
                       </View>
                       <View style={styles.actionButtons}>
                         <TouchableOpacity style={styles.actionButton}>
-                          <Icon name="phone" size={16} color="#fff" />
+                          <Icon name="phone" size={16} color={color.textLight} />
                         </TouchableOpacity>
                         <TouchableOpacity
-                          style={[styles.actionButton, { backgroundColor: '#6B7280' }]}
+                          style={[styles.actionButton, { backgroundColor: color.buttonDisabled }]}
                         >
-                          <Icon name="message-circle" size={16} color="#fff" />
+                          <Icon name="message-circle" size={16} color={color.textLight} />
                         </TouchableOpacity>
                       </View>
                     </View>
@@ -385,7 +385,7 @@ const MarketPlace: React.FC = () => {
             Array.isArray(marketplaceData) &&
             marketplaceData.length === 0 && (
               <View style={styles.noDataContainer}>
-                <Icon name="package" size={48} color="#ccc" />
+                <Icon name="package" size={48} color={color.textLightGray} />
                 <Text style={styles.noDataText}>
                   No marketplace items found
                 </Text>
@@ -405,7 +405,7 @@ const MarketPlace: React.FC = () => {
             navigation.navigate('AddPost' as never);
           }}
         >
-          <Icon name="plus" size={24} color="#fff" />
+          <Icon name="plus" size={24} color={color.textLight} />
         </TouchableOpacity>
       </LinearGradient>
 
@@ -433,7 +433,7 @@ const MarketPlace: React.FC = () => {
                     <Icon
                       name={chip.icon}
                       size={16}
-                      color={isActive ? '#8B5CF6' : '#666'}
+                      color={isActive ? color.primaryLight : color.textLightGray}
                       style={{ marginBottom: 4 }}
                     />
                     <Text
@@ -458,7 +458,7 @@ const MarketPlace: React.FC = () => {
                 value={origin}
                 onChangeText={setOrigin}
                 placeholder="Enter origin"
-                placeholderTextColor="#999"
+                placeholderTextColor={color.textMuted}
               />
             </View>
 
@@ -470,7 +470,7 @@ const MarketPlace: React.FC = () => {
                 value={destination}
                 onChangeText={setDestination}
                 placeholder="Enter destination"
-                placeholderTextColor="#999"
+                placeholderTextColor={color.textMuted}
               />
             </View>
 
@@ -514,7 +514,7 @@ const MarketPlace: React.FC = () => {
                     value={truckBodyType}
                     onChangeText={setTruckBodyType}
                     placeholder="e.g. Open body"
-                    placeholderTextColor="#999"
+                    placeholderTextColor={color.textMuted}
                   />
                 </View>
 
@@ -681,7 +681,7 @@ export default MarketPlace;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#3902A1',
+    backgroundColor: color.primaryDark,
     paddingTop: 40,
   },
   gradientContainer: {
@@ -690,12 +690,12 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
     paddingHorizontal: 16,
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
   },
 
   // Header
   header: {
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     paddingHorizontal: 16,
     paddingVertical: 16,
     alignItems: 'center',
@@ -703,18 +703,18 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#000',
+    color: color.textDark,
   },
 
   // Segmented Control
   segmentedContainer: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     marginHorizontal: 16,
     marginVertical: 12,
     borderRadius: 12,
     padding: 4,
-    shadowColor: '#000',
+    shadowColor: color.shadow,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
@@ -731,16 +731,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   segmentButtonActive: {
-    backgroundColor: '#3902A1',
+    backgroundColor: color.primaryDark,
   },
   segmentText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#3902A1',
+    color: color.primaryDark,
     marginLeft: 6,
   },
   segmentTextActive: {
-    color: '#fff',
+    color: color.textLight,
   },
 
   // Search Container
@@ -751,14 +751,15 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     flex: 1,
+    height: 48,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     paddingHorizontal: 16,
     paddingVertical: 2,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor: color.border,
     marginRight: 12,
     marginTop: 5,
   },
@@ -766,15 +767,15 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     flex: 1,
     fontSize: 16,
-    color: '#000',
+    color: color.textDark,
   },
   filterButton: {
     width: 48,
     height: 48,
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#8B5CF6',
+    borderColor: color.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 5,
@@ -813,13 +814,13 @@ const styles = StyleSheet.create({
 
   // Cards
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
-    shadowColor: '#000',
+    borderColor: color.border,
+    shadowColor: color.shadow,
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
@@ -845,7 +846,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#000',
+    color: color.textDark,
     marginBottom: 4,
   },
   cardTimeAgo: {
@@ -883,7 +884,7 @@ const styles = StyleSheet.create({
   detailValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000',
+    color: color.textDark,
   },
 
   // Contact Information
@@ -898,7 +899,7 @@ const styles = StyleSheet.create({
   contactName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000',
+    color: color.textDark,
     marginBottom: 4,
   },
   ratingContainer: {
@@ -935,10 +936,10 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#3902A1',
+    backgroundColor: color.primaryDark,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: color.shadow,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -983,7 +984,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   retryButtonText: {
-    color: '#fff',
+    color: color.textLight,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -1017,7 +1018,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingHorizontal: 20,
@@ -1064,18 +1065,18 @@ const styles = StyleSheet.create({
   filterLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#000',
+    color: color.textDark,
     marginBottom: 8,
   },
   filterInput: {
     backgroundColor: '#f8f9fa',
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor: color.border,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#000',
+    color: color.textDark,
   },
 
   // Filter Button Rows
@@ -1089,8 +1090,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#8B5CF6',
-    backgroundColor: '#fff',
+    borderColor: color.primaryLight,
+    backgroundColor: color.backgroundWhite,
     minWidth: 60,
     alignItems: 'center',
   },
@@ -1103,7 +1104,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   filterOptionButtonTextActive: {
-    color: '#fff',
+    color: color.textLight,
   },
 
   // Posted Time Filters
@@ -1117,8 +1118,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#8B5CF6',
-    backgroundColor: '#fff',
+    borderColor: color.primaryLight,
+    backgroundColor: color.backgroundWhite,
   },
   postedTimeFilterActive: {
     backgroundColor: '#8B5CF6',
@@ -1129,7 +1130,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   postedTimeFilterTextActive: {
-    color: '#fff',
+    color: color.textLight,
   },
 
   // Action Buttons
@@ -1144,8 +1145,8 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#8B5CF6',
-    backgroundColor: '#fff',
+    borderColor: color.primaryLight,
+    backgroundColor: color.backgroundWhite,
     alignItems: 'center',
   },
   clearButtonText: {
@@ -1162,17 +1163,17 @@ const styles = StyleSheet.create({
   },
   applyButtonText: {
     fontSize: 16,
-    color: '#fff',
+    color: color.textLight,
     fontWeight: '600',
   },
 
   // New Card Styles (matching Home page)
   newCard: {
-    backgroundColor: '#fff',
+    backgroundColor: color.backgroundWhite,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
-    shadowColor: '#000',
+    shadowColor: color.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -1190,7 +1191,7 @@ const styles = StyleSheet.create({
   newCardTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#000',
+    color: color.textDark,
     marginBottom: 4,
   },
   newCardTime: {
@@ -1225,7 +1226,7 @@ const styles = StyleSheet.create({
   newCardRouteText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000',
+    color: color.textDark,
     marginLeft: 6,
   },
   newCardDivider: {
@@ -1250,7 +1251,7 @@ const styles = StyleSheet.create({
   newCardDetailValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000',
+    color: color.textDark,
   },
   newDetailsButton: {
     backgroundColor: '#FEF3C7',
@@ -1263,7 +1264,7 @@ const styles = StyleSheet.create({
   newDetailsButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000',
+    color: color.textDark,
   },
   postFooter: {
     flexDirection: 'row',
