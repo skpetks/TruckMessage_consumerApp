@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { useAppDispatch } from './store/hooks';
 import { store, persistor } from './store/store';
+import { loadThemeFromStorage } from './store/slice/themeSlice';
 import AppNavigator from './navigator/AppNavigator';
+
+// Theme initialization component
+function ThemeInitializer({ children }: { children: React.ReactNode }) {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(loadThemeFromStorage());
+  }, [dispatch]);
+
+  return <>{children}</>;
+}
 
 // Wrapper component that can use the useSafeAreaInsets hook
 function AppContent() {
@@ -29,9 +42,11 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <SafeAreaProvider>
-          <AppContent />
-        </SafeAreaProvider>
+        <ThemeInitializer>
+          <SafeAreaProvider>
+            <AppContent />
+          </SafeAreaProvider>
+        </ThemeInitializer>
       </PersistGate>
     </Provider>
   );

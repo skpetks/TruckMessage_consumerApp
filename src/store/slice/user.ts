@@ -76,12 +76,5 @@ export const {
   refreshToken,
 } = userSlice.actions;
 
-// Export selectors
-export const selectUser = (state: { user: AuthState }) => state.user.user;
-export const selectToken = (state: { user: AuthState }) => state.user.token;
-export const selectIsAuthenticated = (state: { user: AuthState }) => state.user.isAuthenticated;
-export const selectIsLoading = (state: { user: AuthState }) => state.user.isLoading;
-export const selectError = (state: { user: AuthState }) => state.user.error;
-
 // Export reducer
 export default userSlice.reducer;

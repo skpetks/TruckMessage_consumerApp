@@ -1,4 +1,4 @@
-export default {
+export const lightTheme = {
   // Primary Brand Colors
   primary: '#6B46C1',
   primaryDark: '#3902A1',
@@ -84,6 +84,96 @@ export default {
   containerBg: '#6B46C1',
   serviceCardBg: '#1E40AF',
 };
+
+export const darkTheme = {
+  // Primary Brand Colors
+  primary: '#8B5CF6',
+  primaryDark: '#7C3AED',
+  primaryLight: '#A78BFA',
+  
+  // Secondary Colors
+  secondary: '#3B82F6',
+  secondaryLight: '#60A5FA',
+  
+  // Status Colors
+  success: '#10B981',
+  warning: '#F59E0B',
+  danger: '#dc2626',
+  error: '#e74c3c',
+  
+  // Background Colors
+  background: '#111827',
+  backgroundLight: '#1F2937',
+  backgroundWhite: '#1F2937',
+  backgroundGray: '#374151',
+  backgroundLightGray: '#4B5563',
+  backgroundCard: '#1F2937',
+  
+  // Text Colors
+  text: '#F9FAFB',
+  textDark: '#000000',
+  textLight: '#ffffff',
+  textPrimary: '#F9FAFB',
+  textSecondary: '#D1D5DB',
+  textMuted: '#9CA3AF',
+  textGray: '#E5E7EB',
+  textLightGray: '#D1D5DB',
+  
+  // Border Colors
+  border: '#4B5563',
+  borderLight: '#6B7280',
+  borderGray: '#6B7280',
+  
+  // Icon Colors
+  iconPrimary: '#8B5CF6',
+  iconSecondary: '#7C3AED',
+  iconSuccess: '#10B981',
+  iconWarning: '#F59E0B',
+  iconDanger: '#dc2626',
+  iconGray: '#D1D5DB',
+  
+  // Shadow Colors
+  shadow: '#000000',
+  shadowLight: '#000000',
+  
+  // Badge Colors
+  badgeSuccess: '#10B981',
+  badgeWarning: '#F59E0B',
+  badgeDanger: '#dc2626',
+  badgeGray: '#6B7280',
+  
+  // Button Colors
+  buttonPrimary: '#8B5CF6',
+  buttonSecondary: '#3B82F6',
+  buttonSuccess: '#10B981',
+  buttonDanger: '#dc2626',
+  buttonDisabled: '#6B7280',
+  buttonDetails: '#FFFBEB',
+  
+  // Card Colors
+  cardBackground: '#1F2937',
+  cardBorder: '#4B5563',
+  
+  // Input Colors
+  inputBackground: '#374151',
+  inputBorder: '#4B5563',
+  inputFocusBorder: '#8B5CF6',
+  
+  // Tab Colors
+  tabActive: '#3B82F6',
+  tabInactive: '#9CA3AF',
+  tabBackground: '#111827',
+  
+  // Rating Colors
+  rating: '#FFD700',
+  
+  // Legacy Colors
+  containerBg: '#8B5CF6',
+  serviceCardBg: '#3B82F6',
+};
+
+// Default export for backward compatibility
+export default lightTheme;
 
   export const hexToRgba = (hex, alpha) => {
     let r = 0, g = 0, b = 0;

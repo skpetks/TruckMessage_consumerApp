@@ -5,14 +5,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import BottomTabNavigation from "./BottomTabNavigation";
 import AuthNavigator from "./AuthNavigator";
-import { selectIsAuthenticated } from "../store/slice/user";
 import { useAppSelector } from "../store/hooks";
 import IntroScreenNavigator from "./IntroScreenNavigator";
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
-  const  isLoggedIn  = useAppSelector(selectIsAuthenticated);
+  const  isLoggedIn  = useAppSelector(state => state.user.isAuthenticated);
 
   return (
     <NavigationContainer>

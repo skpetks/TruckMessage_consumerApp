@@ -3,16 +3,18 @@ import { persistReducer, persistStore } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import counterReducer from './slice/counterSlice';
 import userReducer from './slice/user';
+import themeReducer from './slice/themeSlice';
 
 const persistConfig = {
   key: 'root', 
   storage: AsyncStorage,
-  whitelist: ['user'], // Only persist user data
+  whitelist: ['user', 'theme'], // Persist user and theme data
 };
 
 const rootReducer = combineReducers({
   counter: counterReducer,
   user: userReducer,
+  theme: themeReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

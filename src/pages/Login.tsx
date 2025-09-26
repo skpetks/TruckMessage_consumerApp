@@ -114,7 +114,7 @@ export default function Login() {
       // Save user data to Redux store
       dispatch(setUser({
         user: {
-        id: response.user.id, 
+        userID: response.user.userID, 
         firstName: response.user.firstName,
         lastName: response.user.lastName,
         userName: response.user.userName,
@@ -132,7 +132,8 @@ export default function Login() {
         organizationID: response.user.organizationID,
         roleID: response.user.roleID,
         token: response.token,
-        refreshToken: response.refreshToken
+        refreshToken: response.refreshToken,
+        createdAt: response.user.createdAt
         },
         token: response.token,
         refreshToken: response.refreshToken

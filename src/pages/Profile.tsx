@@ -13,8 +13,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   clearUser,
-  selectUser,
-  selectIsAuthenticated,
 } from "../store/slice/user";
 import { useNavigation } from "@react-navigation/native";
 import { hexToRgba } from "../components/colors";
@@ -22,8 +20,10 @@ import { hexToRgba } from "../components/colors";
 const Profile = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
-  const user = useAppSelector(selectUser);
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const user = useAppSelector(state => state.user.user);
+  const isAuthenticated = useAppSelector(state => state.user.isAuthenticated);
+
+  console.log(user);
 
   const handleLogout = () => {
     Alert.alert("Logout", "Are you sure you want to logout?", [
@@ -154,6 +154,68 @@ const Profile = () => {
         <TouchableOpacity style={styles.listItem}>
           <View style={styles.listTextBox}>
             <Text style={styles.listTitle}>Edit Profile</Text>
+          </View>
+          <Icon name="chevron-right" size={20} color="#999" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.listItem}>
+          <View style={styles.listTextBox}>
+            <Text style={styles.listTitle}>My Vehicles</Text>
+          </View>
+          <Icon name="chevron-right" size={20} color="#999" />
+        </TouchableOpacity>
+      </View>
+
+      {/* Settings Section */}
+      <Text style={styles.sectionTitle}>Personal information</Text>
+      <View style={styles.sectionContainer}>
+        <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate("Appearance" as never)}>
+          <View style={styles.listTextBox}>
+            <Text style={styles.listTitle}>Appearance</Text>
+          </View>
+          <Icon name="chevron-right" size={20} color="#999" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.listItem}>
+          <View style={styles.listTextBox}>
+            <Text style={styles.listTitle}>Notification settings</Text>
+          </View>
+          <Icon name="chevron-right" size={20} color="#999" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.listItem}>
+          <View style={styles.listTextBox}>
+            <Text style={styles.listTitle}>Account Settings</Text>
+          </View>
+          <Icon name="chevron-right" size={20} color="#999" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.listItem}>
+          <View style={styles.listTextBox}>
+            <Text style={styles.listTitle}>App permissions</Text>
+          </View>
+          <Icon name="chevron-right" size={20} color="#999" />
+        </TouchableOpacity>
+      </View>
+
+      {/* Personal Information Section */}
+      <View style={styles.sectionContainer}>
+        <TouchableOpacity style={styles.listItem}>
+          <View style={styles.listTextBox}>
+            <Text style={styles.listTitle}>Send feedback</Text>
+          </View>
+          <Icon name="chevron-right" size={20} color="#999" />
+        </TouchableOpacity>
+      </View>
+
+
+      {/* Personal Information Section */}
+      <View style={styles.sectionContainer}>
+        <TouchableOpacity style={styles.listItem}>
+          <View style={styles.listTextBox}>
+            <Text style={styles.listTitle}>User ID - {user.userID}</Text>
+          </View>
+          <Icon name="chevron-right" size={20} color="#999" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.listItem}>
+          <View style={styles.listTextBox}>
+            <Text style={styles.listTitle}>Member since - {new Date(user.createdAt).toLocaleDateString("en-GB")}</Text>
           </View>
           <Icon name="chevron-right" size={20} color="#999" />
         </TouchableOpacity>

@@ -4,9 +4,9 @@ import Home from '../pages/Home';
 import CustomBottomTab from '../components/CustomBottomTab';
 import Browse from '../pages/Browse';
 import PostNavigator from './PostNavigator';
-import Profile from '../pages/Profile';
 import MarketPlaceNavigator from './MarketPlaceNavigator';
 import Message from '../pages/Message';
+import ProfileNavigator from './ProfileNavigator';
 
 export type TabParamList = {
   Home: undefined;
@@ -27,7 +27,7 @@ export default function BottomTabNavigation() {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="MarketPlace" component={MarketPlaceNavigator} options={{headerShown: false}} />
       <Tab.Screen name="Message" component={Message} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Profile" component={ProfileNavigator} />
       {/* <Tab.Screen name="More" component={Browse} /> */}
     </Tab.Navigator>
   );

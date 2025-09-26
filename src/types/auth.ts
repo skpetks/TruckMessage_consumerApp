@@ -3,7 +3,7 @@ export interface CheckMobileResponse {
 }
 
 export interface User {
-    id: string;
+    userID: number;
     firstName: string;
     lastName: string;
     userName: string;
@@ -22,6 +22,7 @@ export interface User {
     roleID: number;
     token?: string;
     refreshToken?: string;
+    createdAt: string;
 }
 
 export interface LoginPayload {
